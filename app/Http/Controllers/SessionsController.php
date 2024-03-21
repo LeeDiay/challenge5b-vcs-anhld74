@@ -20,13 +20,13 @@ class SessionsController extends Controller
     public function store()
     {
         $attributes = request()->validate([
-            'email' => 'required|email',
+            'username' => 'required|max:100',
             'password' => 'required'
         ]);
 
         if (! auth()->attempt($attributes)) {
             throw ValidationException::withMessages([
-                'email' => 'Email hoặc mật khẩu không đúng'
+                'username' => 'Tên đăng nhập hoặc mật khẩu không đúng'
             ]);
         }
 

@@ -28,10 +28,10 @@
                                         </div>
                                         @endif
                                         <div class="input-group input-group-outline mt-3">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" name="email">
+                                            <label class="form-label">Tên đăng nhập</label>
+                                            <input type="username" class="form-control" name="username">
                                         </div>
-                                        @error('email')
+                                        @error('username')
                                         <p class='text-danger inputerror'>{{ $message }} </p>
                                         @enderror
                                         <div class="input-group input-group-outline mt-3">
