@@ -74,16 +74,15 @@
                                             </div>
                                             <div class="text-center">
                                                 <button type="submit"
-                                                    class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign
-                                                    Up</button>
+                                                    class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Đăng kí</button>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="card-footer text-center pt-0 px-lg-2 px-1">
                                         <p class="mb-2 text-sm mx-auto">
-                                            Already have an account?
+                                            Bạn đã có tài khoản?
                                             <a href="{{ route('login') }}"
-                                                class="text-primary text-gradient font-weight-bold">Sign in</a>
+                                                class="text-primary text-gradient font-weight-bold">Đăng nhập</a>
                                         </p>
                                     </div>
                                 </div>
