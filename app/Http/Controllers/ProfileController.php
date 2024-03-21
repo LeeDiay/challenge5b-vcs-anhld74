@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -26,5 +27,10 @@ class ProfileController extends Controller
         auth()->user()->update($attributes);
         return back()->withStatus('Cập nhật thông tin thành công');
     
-}
+    }
+    public function index()
+    {
+        $users = User::all();
+        return view('pages.laravel-examples.user-management', ['users' => $users]);
+    }
 }
