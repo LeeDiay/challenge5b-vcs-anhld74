@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             //
             $table->string('username')->after('id')->unique();
-            $table->tinyInteger('level')->default(0)->after('updated_at');
+            $table->string('level')->default('User')->after('updated_at');
+            $table->string('avatar')->nullable()->after('level');
         });
     }
 

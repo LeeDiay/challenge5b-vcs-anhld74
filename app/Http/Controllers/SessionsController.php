@@ -20,7 +20,7 @@ class SessionsController extends Controller
     public function store()
     {
         $attributes = request()->validate([
-            'username' => 'required|max:100',
+            'username' => 'required|max:20',
             'password' => 'required'
         ]);
 

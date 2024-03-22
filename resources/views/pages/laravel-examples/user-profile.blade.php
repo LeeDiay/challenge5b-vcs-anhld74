@@ -14,7 +14,7 @@
                 <div class="row gx-4 mb-2">
                     <div class="col-auto">
                         <div class="avatar avatar-xl position-relative">
-                            <img src="{{ asset('assets') }}/img/bruce-mars.jpg" alt="profile_image"
+                            <img src="{{ auth()->user()->avatar ? asset('uploads/avatars/' . auth()->user()->avatar) : asset('assets/img/default-avatar.jpg')}}"
                                 class="w-100 border-radius-lg shadow-sm">
                         </div>
                     </div>
@@ -24,13 +24,7 @@
                                 {{ auth()->user()->username }}
                             </h5>
                             <p class="mb-0 font-weight-normal text-sm">
-                                @if(auth()->check())
-                                @if(auth()->user()->level == 1)
-                                    Role: Admin
-                                @elseif(auth()->user()->level == 0)
-                                    Role: User
-                                @endif
-                            @endif
+                                {{auth()->user()->level}}
                             </p>
                         </div>
                     </div>
@@ -55,17 +49,7 @@
                             </div>
                         </div>
                         @endif
-                        @if (Session::has('demo'))
-                                <div class="row">
-                                    <div class="alert alert-danger alert-dismissible text-white" role="alert">
-                                        <span class="text-sm">{{ Session::get('demo') }}</span>
-                                        <button type="button" class="btn-close text-lg py-3 opacity-10"
-                                            data-bs-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                </div>
-                        @endif
+                        
                         <form method='POST' action='{{ route('user-profile') }}'>
                             @csrf
                             <div class="row">
@@ -110,6 +94,13 @@
                                         @error('about')
                                         <p class='text-danger inputerror'>{{ $message }} </p>
                                         @enderror
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Thay đổi avatar</label>
+                                    <input type="file" name="avatar" class="form-control border border-2 p-2">
+                                    @error('avatar')
+                                        <p class='text-danger inputerror'>{{ $message }} </p>
+                                    @enderror
                                 </div>
                             </div>
                             <button type="submit" class="btn bg-gradient-dark">Lưu</button>

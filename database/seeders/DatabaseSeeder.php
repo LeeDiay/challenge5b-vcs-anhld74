@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'admin',
             'name' => 'Admin',
             'email' => 'admin@material.com',
-            'password' => ('secret')
+            'password' => ('12345678'),
+            'level' => 'Admin'
         ]);
     }
 }

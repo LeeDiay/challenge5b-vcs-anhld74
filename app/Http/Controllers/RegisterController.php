@@ -15,16 +15,14 @@ class RegisterController extends Controller
     public function store(){
 
         $attributes = request()->validate([
-            'username' => 'required|max:100',
-            'name' => 'required|max:255',
+            'username' => 'required|max:20|min:6',
+            'name' => 'required|max:30',
             'email' => 'required|email|max:255|unique:users,email',
-            'phone' => 'required|max:20',
+            'phone' => 'required|max:15',
             'password' => 'required|min:8|max:255',
         ]);
 
         $user = User::create($attributes);
-        auth()->login($user);
-        
-        return redirect('/dashboard');
+        return redirect('/sign-in')->withStatus('Đăng kí tài khoản thành công');
     } 
 }

@@ -19,10 +19,10 @@
                                         <tr>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">PHOTO</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">USERNAME</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">NAME</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EMAIL</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ROLE</th>
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">CREATION DATE</th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
@@ -39,7 +39,7 @@
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>
-                                                        <img src="{{ asset('assets') }}/img/{{ $user->photo }}" class="avatar avatar-sm me-3 border-radius-lg" alt="{{ $user->name }}">
+                                                        <img src="{{ $user->avatar ? asset('uploads/avatars/' . $user->avatar) : asset('assets/img/default-avatar.jpg') }}" class="avatar avatar-sm me-3 border-radius-lg" alt="{{ $user->name }}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -57,10 +57,9 @@
                                                 <p class="text-xs text-secondary mb-0">{{ $user->email }}</p>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ $user->level }}</span>
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ $user->location}}</span>
+                                                <span class="text-secondary text-xs font-weight-bold"> 
+                                                    {{$user->level}}
+                                                </span>
                                             </td>
                                             <td class="align-middle">
                                                 <a rel="tooltip" class="btn btn-success btn-link" href="" data-original-title="" title="">
