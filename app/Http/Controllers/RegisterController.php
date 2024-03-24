@@ -21,7 +21,7 @@ class RegisterController extends Controller
             'phone' => 'required|max:15',
             'password' => 'required|min:8|max:255',
         ]);
-
+        $attributes['avatar'] = 'default-avatar.jpg';
         $user = User::create($attributes);
         return redirect('/sign-in')->withStatus('Đăng kí tài khoản thành công');
     } 

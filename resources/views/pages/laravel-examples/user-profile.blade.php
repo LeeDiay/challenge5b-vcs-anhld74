@@ -3,7 +3,7 @@
     <x-navbars.sidebar activePage="user-profile"></x-navbars.sidebar>
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
         <!-- Navbar -->
-        <x-navbars.navs.auth titlePage='User Profile'></x-navbars.navs.auth>
+        <x-navbars.navs.auth titlePage='Trang cá nhân'></x-navbars.navs.auth>
         <!-- End Navbar -->
         <div class="container-fluid px-2 px-md-4">
             <div class="page-header min-height-300 border-radius-xl mt-4"
@@ -14,7 +14,7 @@
                 <div class="row gx-4 mb-2">
                     <div class="col-auto">
                         <div class="avatar avatar-xl position-relative">
-                            <img src="{{ auth()->user()->avatar ? asset('assets/img/avatar_user/' . auth()->user()->avatar) : asset('assets/img/default-avatar.jpg')}}" class="w-100 border-radius-lg shadow-sm">
+                            <img src="assets/img/avatar_user/{{ auth()->user()->avatar}}" class="w-100 border-radius-lg shadow-sm">
                         </div>
                     </div>
                     <div class="col-auto my-auto">
