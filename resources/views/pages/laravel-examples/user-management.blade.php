@@ -39,7 +39,7 @@
                                             <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div>
-                                                    <img src="assets/img/avatar_user/{{$user->avatar}}" class="avatar avatar-sm me-3 border-radius-lg" alt="{{ $user->name }}">
+                                                    <img src="assets/img/avatar_user/{{$user->avatar}}" class="avatar avatar-lg me-3 border-radius-lg" alt="{{ $user->name }}">
                                                 </div>
                                             </div>
                                             </td>
