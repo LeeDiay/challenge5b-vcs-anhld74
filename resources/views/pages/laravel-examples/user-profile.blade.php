@@ -14,8 +14,7 @@
                 <div class="row gx-4 mb-2">
                     <div class="col-auto">
                         <div class="avatar avatar-xl position-relative">
-                            <img src="{{ auth()->user()->avatar ? asset('uploads/avatars/' . auth()->user()->avatar) : asset('assets/img/default-avatar.jpg')}}"
-                                class="w-100 border-radius-lg shadow-sm">
+                            <img src="{{ auth()->user()->avatar ? asset('assets/img/avatar_user/' . auth()->user()->avatar) : asset('assets/img/default-avatar.jpg')}}" class="w-100 border-radius-lg shadow-sm">
                         </div>
                     </div>
                     <div class="col-auto my-auto">
@@ -50,7 +49,7 @@
                         </div>
                         @endif
                         
-                        <form method='POST' action='{{ route('user-profile') }}'>
+                        <form method='POST' enctype="multipart/form-data" action='{{ route('user-profile') }}' >
                             @csrf
                             <div class="row">
                                 
@@ -72,7 +71,7 @@
                                
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Số điện thoại</label>
-                                    <input type="number" name="phone" class="form-control border border-2 p-2" value='{{ old('phone', auth()->user()->phone) }}'>
+                                    <input type="text" name="phone" class="form-control border border-2 p-2" value='{{ old('phone', auth()->user()->phone) }}'>
                                     @error('phone')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
@@ -89,7 +88,7 @@
                                 <div class="mb-3 col-md-12">
                                     <label for="floatingTextarea2">Giới thiệu</label>
                                     <textarea class="form-control border border-2 p-2"
-                                        placeholder=" Say something about yourself" id="floatingTextarea2" name="about"
+                                        placeholder=" Nói gì đó về bản thân..." id="floatingTextarea2" name="about"
                                         rows="4" cols="50">{{ old('about', auth()->user()->about) }}</textarea>
                                         @error('about')
                                         <p class='text-danger inputerror'>{{ $message }} </p>
