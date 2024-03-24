@@ -30,6 +30,13 @@ class ProfileController extends Controller
             
             // Kiểm tra xem tệp có phải là hình ảnh hay không
             if ($avatar->isValid() && in_array($avatar->getClientOriginalExtension(), ['jpg', 'jpeg', 'png'])) {
+                if (auth()->user()->avatar) {
+                    // Nếu có, xóa avatar cũ
+                    $oldAvatarPath = public_path('assets/img/avatar_user/') . auth()->user()->avatar;
+                    if (file_exists($oldAvatarPath)) {
+                        unlink($oldAvatarPath); // Xóa tệp tin avatar cũ
+                    }
+                }
                 $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
                 $avatar->move(public_path('assets/img/avatar_user'), $avatarName);
                 $attributes['avatar'] =  $avatarName;
