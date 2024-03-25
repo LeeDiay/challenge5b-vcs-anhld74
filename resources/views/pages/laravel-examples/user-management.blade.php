@@ -61,12 +61,12 @@
                                                     {{$user->level}}
                                                 </span>
                                             </td>
-                                            <td class="align-middle">
+                                            <td class="align-middle float-end">
                                                 <button type="button" class="btn btn-success btn-link viewUserBtn" data-bs-toggle="modal" data-bs-target="#userModal" data-user="{{ json_encode($user) }}">
                                                     <i class="material-icons">visibility</i>
                                                     <div class="ripple-container"></div>
                                                 </button>
-                                                <button type="button" class="btn btn-success btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#userModal" data-id="{{ $user->id }}">
+                                                <button type="button" class="btn btn-success btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user="{{ json_encode($user) }}">
                                                     <i class="material-icons">edit</i>
                                                     <div class="ripple-container"></div>
                                                 </button>
@@ -90,7 +90,7 @@
     <x-plugins></x-plugins>
 </x-layout>
 
-<!-- Modal -->
+<!-- Modal hiển thị thông tin-->
 <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -100,6 +100,9 @@
             </div>
             <div class="modal-body">
                 <div id="userInfo"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -130,14 +133,14 @@
                 <div class="d-flex justify-content-center">
                     <div>
                     <p></p>
-                    <p><strong>  Tên đăng nhập:</strong> ${formatNullOrUndefined(userData.username)}</p>
-                    <p><strong>  Họ và tên:</strong> ${formatNullOrUndefined(userData.name)}</p>
-                    <p><strong>  Email:</strong> ${formatNullOrUndefined(userData.email)}</p>
-                    <p><strong>  Số điện thoại:</strong> ${formatNullOrUndefined(userData.phone)}</p>
-                    <p><strong>  Nơi ở:</strong> ${formatNullOrUndefined(userData.location)}</p>
-                    <p><strong>  Tiểu sử:</strong> ${formatNullOrUndefined(userData.about)}</p>
-                    <p><strong>  Ngày tạo:</strong> ${formattedDate}</p>
-                    <p><strong>  Chức vụ:</strong> ${formatNullOrUndefined(userData.level)}</p>
+                    <p><strong>Tên đăng nhập:</strong> ${formatNullOrUndefined(userData.username)}</p>
+                    <p><strong>Họ và tên:</strong> ${formatNullOrUndefined(userData.name)}</p>
+                    <p><strong>Email:</strong> ${formatNullOrUndefined(userData.email)}</p>
+                    <p><strong>Số điện thoại:</strong> ${formatNullOrUndefined(userData.phone)}</p>
+                    <p><strong>Nơi ở:</strong> ${formatNullOrUndefined(userData.location)}</p>
+                    <p><strong>Tiểu sử:</strong> ${formatNullOrUndefined(userData.about)}</p>
+                    <p><strong>Ngày tạo:</strong> ${formattedDate}</p>
+                    <p><strong>Chức vụ:</strong> ${formatNullOrUndefined(userData.level)}</p>
                     </div>
                 </div>
             `;
@@ -145,3 +148,76 @@
     });
 </script>
 
+<!-- Modal edit thông tin -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Chỉnh sửa thông tin người dùng</h5>
+                <button type="button" class="btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <form method="POST" id="editUserForm" action="{{ route('user-profile') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3 border-bottom ">
+                        <label for="username" class="form-label">Tên đăng nhập:</label>
+                        <input type="text" class="form-control border border-2 p-2" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+                    <div class="mb-3 border-bottom">
+                        <label for="name" class="form-label">Họ và tên:</label>
+                        <input type="text" class="form-control border border-2 p-2" id="name" name="name" placeholder="Nhập họ và tên" required>
+                    </div>
+                    <div class="mb-3 border-bottom">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control border border-2 p-2" id="email" name="email" placeholder="Nhập email" required>
+                    </div>
+                    <div class="mb-3 border-bottom">
+                        <label for="phone" class="form-label">Số điện thoại:</label>
+                        <input type="text" class="form-control border border-2 p-2" id="phone" name="phone" placeholder="Nhập số điện thoại">
+                    <!-- </div>
+                    <div class="mb-3 border-bottom">
+                        <label for="editLocation" class="form-label">Nơi ở:</label>
+                        <input type="text" class="form-control border border-2 p-2" id="editLocation" name="editLocation" placeholder="Nhập nơi ở">
+                    </div>
+                    <div class="mb-3 border-bottom">
+                        <label for="editAbout" class="form-label">Tiểu sử:</label>
+                        <textarea class="form-control border border-2 p-2" id="editAbout" name="editAbout" rows="3" placeholder="Nhập tiểu sử"></textarea>
+                    </div> -->
+                    <div class="mb-3 border-bottom">
+                        <label for="editLevel" class="form-label">Chức vụ:</label>
+                        <select class="form-select" id="editLevel" name="editLevel">
+                            <option value="1">User</option>
+                            <option value="2">Admin</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary" ">Lưu thay đổi</button>
+                    </div>
+            </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+ <!-- Hiển thị thông tin cũ trước khi edit -->
+<script>
+    document.querySelectorAll('.editUserBtn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Lấy thông tin người dùng từ thuộc tính data-user
+            const userData = JSON.parse(this.getAttribute('data-user'));
+            document.getElementById('username').value = userData.username;
+            document.getElementById('name').value = userData.name;
+            document.getElementById('email').value = userData.email;
+            document.getElementById('phone').value = userData.phone || ''; // Nếu không có số điện thoại, để trống
+            // document.getElementById('editLocation').value = userData.location || ''; // Nếu không có nơi ở, để trống
+            // document.getElementById('editAbout').value = userData.about || ''; // Nếu không có tiểu sử, để trống
+            // document.getElementById('editLevel').value = userData.level;
+        });
+    });
+</script>
+
+<script> 
+
+</script>

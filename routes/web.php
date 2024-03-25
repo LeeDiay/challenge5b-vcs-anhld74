@@ -41,6 +41,9 @@ Route::get('/reset-password/{token}', function ($token) {
 Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')->name('profile');
 Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
+// Route::post('edit-profile', [ProfileController::class, 'edit'])->middleware('auth');
+Route::post('edit-profile', [ProfileController::class, 'edit'])->name('edit-profile');
+
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('billing', function () {
 		return view('pages.billing');
@@ -48,12 +51,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('tables', function () {
 		return view('pages.tables');
 	})->name('tables');
-	Route::get('rtl', function () {
-		return view('pages.rtl');
-	})->name('rtl');
-	Route::get('virtual-reality', function () {
-		return view('pages.virtual-reality');
-	})->name('virtual-reality');
 	Route::get('notifications', function () {
 		return view('pages.notifications');
 	})->name('notifications');
