@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::latest()->paginate(5); // Lấy danh sách người dùng với mỗi trang hiển thị 10 người dùng
         return view('pages.laravel-examples.user-management', ['users' => $users]);
     }
 
@@ -17,11 +17,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|min:6|max:20',
+            'username' => 'required|string|min:6|max:20|regex:/^\S*$/',
             'name' => 'required|max:30|string',
             'password' => 'required|min:8|string|max:255',
             'email' => 'required|email',
-            'phone' => 'required|max:11|string',
+            'phone' => 'max:11|string',
             'level' => 'required|string|in:User,Admin',
             'avatar' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048', 
         ]);
@@ -63,7 +63,7 @@ class UserController extends Controller
     {
         $request->validate([
             'userId' => 'required|exists:users,id',
-            'username' => 'required|string|min:6|max:20',
+            'username' => 'required|string|min:6|max:20|regex:/^\S*$/',
             'name' => 'required|string|max:30',
             'email' => 'required|email',
             'phone' => 'nullable|string|max:11',
@@ -103,6 +103,56 @@ class UserController extends Controller
             ]);
         }
     }
+    // public function destroy(Request $request)
+    // {
+    //     $request->validate([
+    //         'userId' => 'required',
+    //     ]);
 
+    //     $user = User::find($request->userId);
+
+    //     if ($user) {
+    //         $user->delete();
+    //         return response()->json([
+    //             'status' => 200,
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'status' => 500,
+    //             'message' => 'Không tìm thấy người dùng.',
+    //         ]);
+    //     }
+    // }
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'userId' => 'required',
+        ]);
+    
+        $user = User::find($request->userId);
+    
+        if ($user) {
+            // Xóa avatar của người dùng từ thư mục lưu trữ
+            if ($user->avatar && $user->avatar != 'default-avatar.jpg') {
+                $avatarPath = public_path('assets/img/avatar_user/' . $user->avatar);
+                if (file_exists($avatarPath)) {
+                    unlink($avatarPath);
+                }
+            }
+    
+            // Xóa người dùng khỏi cơ sở dữ liệu
+            $user->delete();
+    
+            return response()->json([
+                'status' => 200,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Không tìm thấy người dùng.',
+            ]);
+        }
+    }
+    
 
 }

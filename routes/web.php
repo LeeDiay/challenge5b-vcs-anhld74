@@ -66,5 +66,5 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('user-profile');
 	Route::post('/store', [UserController::class, 'store'])->name('store');
 	Route::post('/update', [UserController::class, 'update'])->name('update');
-	Route::delete('/delete', [UserController::class, 'delete'])->name('delete');
+	Route::delete('/delete', [UserController::class, 'destroy'])->name('delete');
 });

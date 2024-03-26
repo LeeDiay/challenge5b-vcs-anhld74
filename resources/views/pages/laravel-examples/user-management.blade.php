@@ -10,7 +10,7 @@
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"></div>
                         <div class="me-3 my-3 text-end">
-                            <button type="button" class="btn bg-gradient-dark mb-0 addUserModal" data-bs-toggle="modal" data-bs-target="#addUserModal" >
+                            <button type="button" class="btn bg-gradient-primary mb-0 addUserModal" data-bs-toggle="modal" data-bs-target="#addUserModal" >
                                 <i class="material-icons text-sm">add</i>&nbsp;&nbsp;Thêm người dùng mới
                             </button>
                             
@@ -68,21 +68,23 @@
                                                         <i class="material-icons">visibility</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
-                                                    <button type="button" class="btn btn-success btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user="{{ json_encode($user) }}">
+                                                    <button type="button" class="btn btn-warning btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user="{{ json_encode($user) }}">
                                                         <i class="material-icons">edit</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
-                                                    <button type="button" class="btn btn-danger btn-link" data-original-title="" title="">
+                                                    <button type="button" class="btn btn-danger btn-link deleteUserBtn" data-user-id="{{ $user->id }}">
                                                         <i class="material-icons">close</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
                                                 </td>
                                             </tr>
                                         @endforeach
+                                        
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        {{ $users->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
@@ -307,7 +309,7 @@
                             'success'
                         ).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = '{{ route('user-management') }}';
+                                window.location.reload();
                             }
                         });                    
                     } else {
@@ -325,7 +327,7 @@
                     // Xử lý lỗi AJAX
                     Swal.fire(
                         'Đã xảy ra lỗi!',
-                        'Username hoặc Email đã tồn tại (Độ dài Username tối thiểu 6 kí tự và tối đa 20 kí tự.)',
+                        'Username hoặc Email đã tồn tại (Độ dài Username tối thiểu 6 kí tự, tối đa 20 kí tự và không chứa dấu cách.)',
                         'error'
                     );
                     console.error(xhr.responseText);
@@ -359,7 +361,7 @@
                         'success'
                     ).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = '{{ route('user-management') }}';
+                                window.location.reload();
                             }
                         });    
                 }
@@ -371,7 +373,7 @@
                     // Xử lý lỗi AJAX
                     Swal.fire(
                         'Đã xảy ra lỗi!',
-                        'Username hoặc Email đã tồn tại (Chú ý: Độ dài Username tối thiểu 6 kí tự và tối đa 20 kí tự.)',
+                        'Username hoặc Email đã tồn tại (Chú ý: Độ dài Username tối thiểu 6 kí tự, tối đa 20 kí tự và không chứa dấu cách.)',
                         'error'
                     );
                     console.error(xhr.responseText);
@@ -379,6 +381,64 @@
                 }
         });
     });
+
+    // Xử lý sự kiện click nút "Xóa"
+    document.querySelectorAll('.deleteUserBtn').forEach(button => {
+    button.addEventListener('click', function() {
+        const userId = this.getAttribute('data-user-id');
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn xóa người dùng này?',
+            text: "Hành động này không thể hoàn tác!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Lấy CSRF token từ thẻ meta
+                const csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+
+                // Gửi yêu cầu xóa người dùng qua Ajax
+                $.ajax({
+                    url: '{{ route('delete') }}',
+                    method: 'DELETE',
+                    data: { userId: userId, _token: csrfToken },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status == 200) {
+                            Swal.fire(
+                                'Thành công!',
+                                'Người dùng đã được xóa.',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire(
+                                'Lỗi!',
+                                response.message || 'Có lỗi xảy ra khi xóa người dùng.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi Ajax
+                        Swal.fire(
+                            'Lỗi!',
+                            'Có lỗi xảy ra khi xóa người dùng.',
+                            'error'
+                        );
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
+});
 
 </script>
 

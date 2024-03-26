@@ -102,7 +102,10 @@
                                     @enderror
                                 </div>
                             </div>
-                            <button type="submit" class="btn bg-gradient-dark">Lưu</button>
+                            <div>
+                            <button type="submit" class="btn bg-gradient-success ">
+                                <i class="material-icons text-lg">save</i>&nbsp;&nbsp;Lưu thay đổi
+                            </button>
                         </form>
 
                     </div>
