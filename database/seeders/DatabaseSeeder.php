@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@material.com',
             'password' => ('12345678'),
-            'level' => 'Admin'
+            'level' => 'Admin',
+            'avatar' => 'default-avatar.jpg'
         ]);
     }
 }

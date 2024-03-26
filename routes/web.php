@@ -42,7 +42,6 @@ Route::get('/reset-password/{token}', function ($token) {
 Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')->name('profile');
 Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
-// Route::post('edit-profile', [ProfileController::class, 'edit'])->middleware('auth');
 Route::post('edit-profile', [ProfileController::class, 'edit'])->name('edit-profile');
 
 Route::group(['middleware' => 'auth'], function () {
@@ -66,4 +65,6 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.laravel-examples.user-profile');
 	})->name('user-profile');
 	Route::post('/store', [UserController::class, 'store'])->name('store');
+	Route::get('/edit', [UserController::class, 'edit'])->name('edit');
+	Route::post('/update', [UserController::class, 'update'])->name('update');
 });

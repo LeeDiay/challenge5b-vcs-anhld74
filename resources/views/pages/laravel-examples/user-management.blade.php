@@ -133,7 +133,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="avatar" class="form-label">Chọn</label>
+                        <label for="avatar" class="form-label">Chọn avatar</label>
                         <input type="file" class="form-control border border-2 p-2" id="avatar" name="avatar" class="form-control">
                     </div>
                     <div class="modal-footer">
@@ -175,46 +175,50 @@
                 <button type="button" class="btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            <form method="POST" id="editUserForm" action="{{ route('user-profile') }}" enctype="multipart/form-data">
+                <form method="POST" id="editUserForm" action="#" enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" id="userId" name="userId" value="">
                     <div class="mb-3 border-bottom ">
                         <label for="username" class="form-label">Tên đăng nhập:</label>
-                        <input type="text" class="form-control border border-2 p-2" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
+                        <input type="text" class="form-control border border-2 p-2" id="editUsername" name="username" placeholder="Nhập tên đăng nhập" required>
                     </div>
                     <div class="mb-3 border-bottom">
                         <label for="name" class="form-label">Họ và tên:</label>
-                        <input type="text" class="form-control border border-2 p-2" id="name" name="name" placeholder="Nhập họ và tên" required>
+                        <input type="text" class="form-control border border-2 p-2" id="editName" name="name" placeholder="Nhập họ và tên" required>
                     </div>
                     <div class="mb-3 border-bottom">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="email" class="form-control border border-2 p-2" id="email" name="email" placeholder="Nhập email" required>
+                        <input type="email" class="form-control border border-2 p-2" id="editEmail" name="email" placeholder="Nhập email" required>
                     </div>
                     <div class="mb-3 border-bottom">
                         <label for="phone" class="form-label">Số điện thoại:</label>
-                        <input type="text" class="form-control border border-2 p-2" id="phone" name="phone" placeholder="Nhập số điện thoại">
-                    <!-- </div>
+                        <input type="text" class="form-control border border-2 p-2" id="editPhone" name="phone" placeholder="Nhập số điện thoại">
+                    </div>
                     <div class="mb-3 border-bottom">
                         <label for="editLocation" class="form-label">Nơi ở:</label>
-                        <input type="text" class="form-control border border-2 p-2" id="editLocation" name="editLocation" placeholder="Nhập nơi ở">
+                        <input type="text" class="form-control border border-2 p-2" id="editLocation" name="location" placeholder="Nhập nơi ở">
                     </div>
                     <div class="mb-3 border-bottom">
                         <label for="editAbout" class="form-label">Tiểu sử:</label>
-                        <textarea class="form-control border border-2 p-2" id="editAbout" name="editAbout" rows="3" placeholder="Nhập tiểu sử"></textarea>
-                    </div> -->
+                        <textarea class="form-control border border-2 p-2" id="editAbout" name="about" rows="3" placeholder="Nhập tiểu sử"></textarea>
+                    </div>
                     <div class="mb-3 border-bottom">
                         <label for="editLevel" class="form-label">Chức vụ:</label>
-                        <select class="form-select" id="editLevel" name="editLevel">
-                            <option value="1">User</option>
-                            <option value="2">Admin</option>
+                        <select class="form-select" id="editLevel" name="level">
+                            <option value="User">User</option>
+                            <option value="Admin">Admin</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">Chọn avatar mới:</label>
+                        <input type="file" class="form-control border border-2 p-2" id="editAvatar" name="avatar" class="form-control">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary" ">Lưu thay đổi</button>
+                        <button type="submit" id="editUserBtn"class="btn btn-primary" ">Lưu thay đổi</button>
                     </div>
-            </form>
+                </form>
             </div>
-            
         </div>
     </div>
 </div>
@@ -222,9 +226,9 @@
 
 <!-- Script để xử lý sự kiện click và hiển thị modal -->
 <script src='https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js'></script>
-  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Hàm kiểm tra giá trị null và thay thế
     function formatNullOrUndefined(value) {
@@ -268,13 +272,14 @@
         button.addEventListener('click', function() {
             // Lấy thông tin người dùng từ thuộc tính data-user
             const userData = JSON.parse(this.getAttribute('data-user'));
-            document.getElementById('username').value = userData.username;
-            document.getElementById('name').value = userData.name;
-            document.getElementById('email').value = userData.email;
-            document.getElementById('phone').value = userData.phone || ''; // Nếu không có số điện thoại, để trống
-            // document.getElementById('editLocation').value = userData.location || ''; // Nếu không có nơi ở, để trống
-            // document.getElementById('editAbout').value = userData.about || ''; // Nếu không có tiểu sử, để trống
-            // document.getElementById('editLevel').value = userData.level;
+            document.getElementById('editUsername').value = userData.username;
+            document.getElementById('editName').value = userData.name;
+            document.getElementById('editEmail').value = userData.email;
+            document.getElementById('editPhone').value = userData.phone || ''; // Nếu không có số điện thoại, để trống
+            document.getElementById('editLocation').value = userData.location || ''; // Nếu không có nơi ở, để trống
+            document.getElementById('editAbout').value = userData.about || ''; // Nếu không có tiểu sử, để trống
+            document.getElementById('editLevel').value = userData.level;
+            document.getElementById('userId').value = userData.id; 
         });
     });
 
@@ -313,6 +318,7 @@
                         );
                     }
                     $("#addUserBtn").text('Thêm');
+                    $("#addUserForm")[0].reset();
                     $("#addUserModal").modal('hide');
                 },
                 error: function(xhr, status, error) {
@@ -326,6 +332,42 @@
                     $("#addUserBtn").text('Thêm');
                 }
             });
+        });
+    });
+
+    //gửi yêu cầu update thông tin user
+    $("#editUserForm").submit(function(e) {
+        e.preventDefault();
+        const fd = new FormData(this);
+        $("#editUserBtn").text('Đang cập nhật...');
+        const userId = $("#userId").val();
+        fd.append('userId', userId);
+        
+        $.ajax({
+            url: '{{ route('update') }}',
+            method: 'post',
+            data: fd,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status == 200) {
+                    Swal.fire(
+                        'Thành công',
+                        'Thông tin người dùng đã được cập nhật!',
+                        'success'
+                    ).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '{{ route('user-management') }}';
+                            }
+                        });    ;
+                    
+                }
+                $("#editUserBtn").text('Cập nhật người dùng');
+                $("#editUserForm")[0].reset();
+                $("#editUserModal").modal('hide');
+            }
         });
     });
 
