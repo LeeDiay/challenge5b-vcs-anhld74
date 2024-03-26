@@ -48,28 +48,10 @@ class ProfileController extends Controller
         $user->update($attributes);
         return back()->withStatus('Cập nhật thông tin thành công');
     }
-
-
     public function index()
     {
         $users = User::all();
         return view('pages.laravel-examples.user-management', ['users' => $users]);
     }
 
-    public function edit(Request $request)
-    {
-        $user = User::find($request->username);
-
-        $attributes = $request->validate([
-            'email' => 'required|email|unique:users,email',
-            'name' => 'required|max:30',
-            'phone' => 'required|max:10',
-            'about' => 'max:150',
-            'location' => 'max:300',
-            'avatar' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048'
-        ]);
-        // Lưu thông tin đã cập nhật vào cơ sở dữ liệu
-        $user->update($attributes);
-        return back()->withStatus('Cập nhật thông tin thành công');
-    }
 }

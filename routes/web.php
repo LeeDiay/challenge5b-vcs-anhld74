@@ -65,6 +65,6 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.laravel-examples.user-profile');
 	})->name('user-profile');
 	Route::post('/store', [UserController::class, 'store'])->name('store');
-	Route::get('/edit', [UserController::class, 'edit'])->name('edit');
 	Route::post('/update', [UserController::class, 'update'])->name('update');
+	Route::delete('/delete', [UserController::class, 'delete'])->name('delete');
 });

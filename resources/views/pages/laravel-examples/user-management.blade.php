@@ -335,7 +335,7 @@
         });
     });
 
-    //gửi yêu cầu update thông tin user
+    //Gửi yêu cầu update thông tin user
     $("#editUserForm").submit(function(e) {
         e.preventDefault();
         const fd = new FormData(this);
@@ -361,8 +361,7 @@
                             if (result.isConfirmed) {
                                 window.location.href = '{{ route('user-management') }}';
                             }
-                        });    ;
-                    
+                        });    
                 }
                 $("#editUserBtn").text('Cập nhật người dùng');
                 $("#editUserForm")[0].reset();
