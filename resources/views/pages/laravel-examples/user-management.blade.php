@@ -98,7 +98,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addUserModalLabel">Thêm người dùng mới</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="addUserForm" action="#" method="POST" enctype="multipart/form-data">
@@ -127,9 +127,9 @@
                     </div>
                     <div class="mb-3">
                         <label for="newLevel" class="form-label">Chức vụ:</label>
-                        <select class="form-select border border-2 p-2" id="newLevel" name="newLevel">
-                            <option value="1">User</option>
-                            <option value="2">Admin</option>
+                        <select class="form-select border border-2 p-2" id="level" name="level">
+                            <option value="User">User</option>
+                            <option value="Admin">Admin</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -278,54 +278,55 @@
         });
     });
 
+    //Gửi yêu cầu thêm mới user
     $(function() {
-    // Thêm mới người dùng
-    $("#addUserForm").submit(function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        $("#addUserBtn").text('Đang thêm...');
+        // Thêm mới người dùng
+        $("#addUserForm").submit(function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            $("#addUserBtn").text('Đang thêm...');
 
-        $.ajax({
-            url: '{{ route('store') }}',
-            method: 'post',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            dataType: 'json',
-            success: function(response) {
-                if (response.status == 200) {
+            $.ajax({
+                url: '{{ route('store') }}',
+                method: 'post',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status == 200) {
+                        Swal.fire(
+                            'Thành công!',
+                            'Người dùng mới đã được thêm vào hệ thống!',
+                            'success'
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '{{ route('user-management') }}';
+                            }
+                        });                    
+                    } else {
+                        Swal.fire(
+                            'Lỗi!',
+                            response.message || 'Có lỗi xảy ra khi thêm người dùng mới.',
+                            'error'
+                        );
+                    }
+                    $("#addUserBtn").text('Thêm');
+                    $("#addUserModal").modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý lỗi AJAX
                     Swal.fire(
-                        'Thành công!',
-                        'Người dùng mới đã được thêm vào hệ thống!',
-                        'success'
-                    ).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = '{{ route('user-management') }}';
-                        }
-                    });                    
-                } else {
-                    Swal.fire(
-                        'Lỗi!',
-                        response.message || 'Có lỗi xảy ra khi thêm người dùng mới.',
+                        'Đã xảy ra lỗi!',
+                        'Username hoặc Email đã tồn tại (Độ dài Username tối thiểu 6 kí tự và tối đa 20 kí tự.)',
                         'error'
                     );
+                    console.error(xhr.responseText);
+                    $("#addUserBtn").text('Thêm');
                 }
-                $("#addUserBtn").text('Thêm');
-                $("#addUserModal").modal('hide');
-            },
-            error: function(xhr, status, error) {
-                // Xử lý lỗi AJAX
-                Swal.fire(
-                    'Đã xảy ra lỗi!',
-                    'Username hoặc Email đã tồn tại (Độ dài Username tối thiểu 6 kí tự và tối đa 20 kí tự.)',
-                    'error'
-                );
-                console.error(xhr.responseText);
-                $("#addUserBtn").text('Thêm');
-            }
+            });
         });
-    });
     });
 
 </script>
