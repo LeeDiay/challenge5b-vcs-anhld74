@@ -41,7 +41,6 @@ class ProfileController extends Controller
                 $avatar->move(public_path('assets/img/avatar_user'), $avatarName);
                 $attributes['avatar'] =  $avatarName;
             } else {
-                // Nếu tệp không phải là hình ảnh, trả về thông báo lỗi
                 return back()->withErrors(['avatar' => 'Ảnh tải lên không hợp lệ, phải có định dạng: jpg, jpeg, png.']);
             }
         }
