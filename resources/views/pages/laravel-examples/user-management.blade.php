@@ -400,7 +400,6 @@
                 // Lấy CSRF token từ thẻ meta
                 const csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
 
-                // Gửi yêu cầu xóa người dùng qua Ajax
                 $.ajax({
                     url: '{{ route('delete') }}',
                     method: 'DELETE',

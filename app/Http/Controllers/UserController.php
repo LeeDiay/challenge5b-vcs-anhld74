@@ -103,26 +103,7 @@ class UserController extends Controller
             ]);
         }
     }
-    // public function destroy(Request $request)
-    // {
-    //     $request->validate([
-    //         'userId' => 'required',
-    //     ]);
 
-    //     $user = User::find($request->userId);
-
-    //     if ($user) {
-    //         $user->delete();
-    //         return response()->json([
-    //             'status' => 200,
-    //         ]);
-    //     } else {
-    //         return response()->json([
-    //             'status' => 500,
-    //             'message' => 'Không tìm thấy người dùng.',
-    //         ]);
-    //     }
-    // }
     public function destroy(Request $request)
     {
         $request->validate([
@@ -132,7 +113,6 @@ class UserController extends Controller
         $user = User::find($request->userId);
     
         if ($user) {
-            // Xóa avatar của người dùng từ thư mục lưu trữ
             if ($user->avatar && $user->avatar != 'default-avatar.jpg') {
                 $avatarPath = public_path('assets/img/avatar_user/' . $user->avatar);
                 if (file_exists($avatarPath)) {
@@ -140,9 +120,7 @@ class UserController extends Controller
                 }
             }
     
-            // Xóa người dùng khỏi cơ sở dữ liệu
             $user->delete();
-    
             return response()->json([
                 'status' => 200,
             ]);
