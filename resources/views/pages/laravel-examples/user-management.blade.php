@@ -366,7 +366,17 @@
                 $("#editUserBtn").text('Cập nhật người dùng');
                 $("#editUserForm")[0].reset();
                 $("#editUserModal").modal('hide');
-            }
+            },
+            error: function(xhr, status, error) {
+                    // Xử lý lỗi AJAX
+                    Swal.fire(
+                        'Đã xảy ra lỗi!',
+                        'Username hoặc Email đã tồn tại (Chú ý: Độ dài Username tối thiểu 6 kí tự và tối đa 20 kí tự.)',
+                        'error'
+                    );
+                    console.error(xhr.responseText);
+                    $("#editUserBtn").text('Chỉnh sửa');
+                }
         });
     });
 
