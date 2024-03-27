@@ -7,7 +7,7 @@
                         document.write(new Date().getFullYear())
 
                     </script>,
-                    made by Le Duc Anh
+                    made by Lê Đức Anh
                    
                 </div>
             </div>

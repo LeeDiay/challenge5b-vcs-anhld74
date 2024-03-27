@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -151,6 +151,20 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->back()->with('status', 'Mật khẩu đã được thay đổi thành công.');
+    }
+
+    public function getNewUsersCount()
+    {
+        $newUsersCount = User::whereDate('created_at', Carbon::today())->count();
+
+        return response()->json(['new_users_count' => $newUsersCount]);
+    }
+
+    public function getTotalUsersCount()
+    {
+        $totalUsersCount = User::count();
+
+        return response()->json(['total_users_count' => $totalUsersCount]);
     }
 
 

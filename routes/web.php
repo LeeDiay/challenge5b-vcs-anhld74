@@ -71,4 +71,6 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.laravel-examples.change-password');
 	})->name('change-password');
 	Route::post('/change-password', [UserController::class, 'changePassword']);
+	Route::get('/new-users-count', [UserController::class, 'getNewUsersCount']);
+	Route::get('/total-users-count', [UserController::class, 'getTotalUsersCount']);
 });
