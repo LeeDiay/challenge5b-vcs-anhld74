@@ -2,7 +2,7 @@
     <x-navbars.sidebar activePage="user-management"></x-navbars.sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <x-navbars.navs.auth titlePage="Quản lí người dùng"></x-navbars.navs.auth>
+        <x-navbars.navs.auth titlePage="Danh sách người dùng"></x-navbars.navs.auth>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             <div class="row">
@@ -10,10 +10,11 @@
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"></div>
                         <div class="me-3 my-3 text-end">
+                        @if (Auth::user()->level == 'Admin')
                             <button type="button" class="btn bg-gradient-primary mb-0 addUserModal" data-bs-toggle="modal" data-bs-target="#addUserModal" >
                                 <i class="material-icons text-sm">add</i>&nbsp;&nbsp;Thêm người dùng mới
                             </button>
-                            
+                        @endif    
                         </div>
 
                         <div class="card-body px-0 pb-2">
@@ -68,6 +69,7 @@
                                                         <i class="material-icons">visibility</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
+                                                    @if (Auth::user()->level == 'Admin')
                                                     <button type="button" class="btn btn-warning btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user="{{ json_encode($user) }}">
                                                         <i class="material-icons">edit</i>
                                                         <div class="ripple-container"></div>
@@ -76,6 +78,7 @@
                                                         <i class="material-icons">close</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

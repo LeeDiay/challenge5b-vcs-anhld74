@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->paginate(5); // Lấy danh sách người dùng với mỗi trang hiển thị 10 người dùng
+        $users = User::latest()->paginate(5); 
         return view('pages.laravel-examples.user-management', ['users' => $users]);
     }
 
@@ -132,5 +134,24 @@ class UserController extends Controller
         }
     }
     
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|max:255|regex:/^\S*$/',
+            'newPassword' => 'required|string|min:8|max:255|different:password|regex:/^\S*$/',
+            'cnewPassword' => 'required|string|same:newPassword|regex:/^\S*$/',
+        ]);
+
+        $user = auth()->user(); 
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->back()->withErrors(['password' => 'Mật khẩu hiện tại không chính xác.']);
+        }
+
+        $user->password = $request->newPassword;
+        $user->save();
+
+        return redirect()->back()->with('status', 'Mật khẩu đã được thay đổi thành công.');
+    }
+
 
 }

@@ -39,12 +39,12 @@ Route::get('/reset-password/{token}', function ($token) {
 	return view('sessions.password.reset', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
 
-Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
-Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')->name('profile');
-Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
-Route::post('edit-profile', [ProfileController::class, 'edit'])->name('edit-profile');
+
 
 Route::group(['middleware' => 'auth'], function () {
+	Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
+	Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')->name('profile');
+	Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
 	Route::get('billing', function () {
 		return view('pages.billing');
 	})->name('billing');
@@ -67,4 +67,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/store', [UserController::class, 'store'])->name('store');
 	Route::post('/update', [UserController::class, 'update'])->name('update');
 	Route::delete('/delete', [UserController::class, 'destroy'])->name('delete');
+	Route::get('change-password', function () {
+		return view('pages.laravel-examples.change-password');
+	})->name('change-password');
+	Route::post('/change-password', [UserController::class, 'changePassword']);
 });
