@@ -23,18 +23,24 @@ class SessionsController extends Controller
             'username' => 'required|max:20',
             'password' => 'required'
         ]);
-
+    
         if (! auth()->attempt($attributes)) {
             throw ValidationException::withMessages([
                 'username' => 'Tên đăng nhập hoặc mật khẩu không đúng'
             ]);
         }
-
+    
         session()->regenerate();
-
-        return redirect('/dashboard');
-
+    
+        // Kiểm tra cấp độ của người dùng sau khi đăng nhập
+        $user = auth()->user();
+        if ($user->level === 'Admin') {
+            return redirect('/dashboard');
+        } else {
+            return redirect('/exercises-management');
+        }
     }
+    
 
     public function show(){
         request()->validate([

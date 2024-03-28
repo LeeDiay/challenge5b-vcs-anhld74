@@ -2,7 +2,7 @@
     <x-navbars.sidebar activePage='dashboard'></x-navbars.sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <x-navbars.navs.auth titlePage="Dashboard"></x-navbars.navs.auth>
+        <x-navbars.navs.auth titlePage="Trang chủ"></x-navbars.navs.auth>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             <div class="row">
@@ -83,8 +83,25 @@
                             </div>
                             <div class="text-end pt-1">
                                 <p class="text-sm mb-0 text-capitalize">Tổng số bài tập</p>
-                                <h4 class="mb-0">0</h4>
+                                <h4 class="mb-0 total-exercises-count">0</h4>
                             </div>
+                            
+                            <script>
+                                $(document).ready(function() {
+                                    // Lấy tổng số bài tập
+                                    $.ajax({
+                                        url: '/total-exercises-count',
+                                        type: 'GET',
+                                        success: function(response) {
+                                            $('.total-exercises-count').text(response.total_exercises_count);
+                                        },
+                                        error: function(xhr) {
+                                            console.log(xhr.responseText); // Xử lý lỗi nếu có
+                                        }
+                                    });
+                                });
+                            </script>
+                            
                         </div>
                         <hr class="dark horizontal my-0">
                         <div class="card-footer p-3">

@@ -33,55 +33,58 @@
                                     </thead>
                                     <tbody>
                                         @foreach($users as $key => $user)
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
+                                            @if(Auth::user()->level != 'User' || ($user->level != 'Admin'))
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex px-2 py-1">
+                                                            <div class="d-flex flex-column justify-content-center">
+                                                                <p class="mb-0 text-sm">{{ $key + 1 }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex px-2 py-1">
+                                                            <div>
+                                                                <img src="assets/img/avatar_user/{{$user->avatar}}" class="avatar avatar-lg me-3 border-radius-lg" alt="{{ $user->name }}">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <p class="mb-0 text-sm">{{ $key + 1 }}</p>
+                                                            <h6 class="mb-0 text-sm">{{ $user->username }}</h6>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div>
-                                                            <img src="assets/img/avatar_user/{{$user->avatar}}" class="avatar avatar-lg me-3 border-radius-lg" alt="{{ $user->name }}">
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">{{ $user->name }}</h6>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">{{ $user->username }}</h6>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">{{ $user->name }}</h6>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <p class="text-xs text-secondary mb-0">{{ $user->email }}</p>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span class="text-secondary text-xs font-weight-bold">{{ $user->level }}</span>
-                                                </td>
-                                                <td class="align-middle float-end">
-                                                    <button type="button" class="btn btn-success btn-link viewUserBtn" data-bs-toggle="modal" data-bs-target="#userModal" data-user="{{ json_encode($user) }}">
-                                                        <i class="material-icons">visibility</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
-                                                    @if (Auth::user()->level == 'Admin')
-                                                    <button type="button" class="btn btn-warning btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user="{{ json_encode($user) }}">
-                                                        <i class="material-icons">edit</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger btn-link deleteUserBtn" data-user-id="{{ $user->id }}">
-                                                        <i class="material-icons">close</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
-                                                    @endif
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                    <td class="align-middle text-center text-sm">
+                                                        <p class="text-xs text-secondary mb-0">{{ $user->email }}</p>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <span class="text-secondary text-xs font-weight-bold">{{ $user->level }}</span>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <button type="button" class="btn btn-success btn-link viewUserBtn" data-bs-toggle="modal" data-bs-target="#userModal" data-user="{{ json_encode($user) }}">
+                                                            <i class="material-icons">visibility</i>
+                                                            <div class="ripple-container"></div>
+                                                        </button>
+                                                        @if (Auth::user()->level == 'Admin')
+                                                            <button type="button" class="btn btn-warning btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user="{{ json_encode($user) }}">
+                                                                <i class="material-icons">edit</i>
+                                                                <div class="ripple-container"></div>
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger btn-link deleteUserBtn" data-user-id="{{ $user->id }}">
+                                                                <i class="material-icons">close</i>
+                                                                <div class="ripple-container"></div>
+                                                            </button>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @endforeach
+
                                         
                                     </tbody>
                                 </table>
