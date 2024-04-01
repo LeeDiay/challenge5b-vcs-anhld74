@@ -53,9 +53,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/exercise/{id}', [ExerciseController::class, 'show'])->name('exercise.detail');
 	Route::post('/exercises-store', [ExerciseController::class, 'store'])->name('exercises.store');
 	Route::post('/exercises-update', [ExerciseController::class, 'update'])->name('exercises.update');
-	// Route::post('/exercises-submit', [ExerciseController::class, 'submit'])->name('exercises.submit');
-
-	Route::post('exercises-management', [ExerciseController::class, 'submit'])->name('exercises.submit');
+	Route::post('/exercises-submit', [ExerciseController::class, 'submit'])->name('exercises.submit');
+	// Route::post('exercises-management', [ExerciseController::class, 'submit'])->name('exercises.submit');
 
 	Route::delete('/exercises-delete', [ExerciseController::class, 'destroy'])->name('exercises.delete');
 	Route::get('/total-exercises-count', [ExerciseController::class, 'getTotalExercisesCount']);

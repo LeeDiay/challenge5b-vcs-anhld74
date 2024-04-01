@@ -247,7 +247,7 @@
        // Hiển thị thông tin bài tập trong modal cho User
         @if (Auth::user()->level === 'User')
             document.getElementById('exerciseInfo').innerHTML = `
-                <div class="d-flex justify-content">
+                <div class="d-flex justify-content-center">
                     <div>
                         <p></p>
                         <p><strong>Tên bài tập:</strong> ${formatNullOrUndefined(exerciseData.name)}</p>
@@ -280,7 +280,7 @@
         // Hiển thị thông tin bài tập trong modal cho Admin
         @if (Auth::user()->level === 'Admin')
             document.getElementById('exerciseInfo').innerHTML = `
-                <div class="d-flex justify-content">
+                <div class="d-flex justify-content-center">
                     <div>
                         <p></p>
                         <p><strong>Tên bài tập:</strong> ${formatNullOrUndefined(exerciseData.name)}</p>
