@@ -8,6 +8,7 @@ use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::delete('/quiz-delete', [QuizController::class, 'destroy'])->name('quiz.delete');
 	Route::post('/quiz-submit', [QuizController::class, 'submit'])->name('quiz.submit');
 
+	//message route
+	Route::get('/messages', [MessageController::class, 'index'])->name('messages');
+	Route::post('/messages-send', [MessageController::class, 'send'])->name('messages.send');
 
 
 

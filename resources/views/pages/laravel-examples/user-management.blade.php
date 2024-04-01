@@ -69,13 +69,18 @@
                                                             <i class="material-icons">visibility</i>
                                                             <div class="ripple-container"></div>
                                                         </button>
+                                                        <button type="button" class="btn btn-info btn-link chatUserBtn" data-bs-toggle="modal" data-bs-target="#messageModal" data-user="{{ json_encode($user) }}">
+                                                            <i class="material-icons">chat</i>
+                                                            <div class="ripple-container"></div>
+                                                        </button>
+                                                        
                                                         @if (Auth::user()->level == 'Admin')
                                                             <button type="button" class="btn btn-warning btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user="{{ json_encode($user) }}">
                                                                 <i class="material-icons">edit</i>
                                                                 <div class="ripple-container"></div>
                                                             </button>
                                                             <button type="button" class="btn btn-danger btn-link deleteUserBtn" data-user-id="{{ $user->id }}">
-                                                                <i class="material-icons">close</i>
+                                                                <i class="material-icons">delete</i>
                                                                 <div class="ripple-container"></div>
                                                             </button>
                                                         @endif
@@ -229,6 +234,28 @@
     </div>
 </div>
  <!-- Kết thúc Modal edit thông tin -->
+
+ <!-- Modal hiển thị tin nhắn -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Tin nhắn</h5>
+                <button type="button" class="btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Nội dung tin nhắn sẽ được hiển thị ở đây -->
+                <div id="messageContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <!-- Nút sửa và xóa tin nhắn -->
+                <button type="button" class="btn btn-primary" id="editMessageBtn">Sửa tin nhắn</button>
+                <button type="button" class="btn btn-danger" id="deleteMessageBtn">Xóa tin nhắn</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Script để xử lý sự kiện click và hiển thị modal -->
 <script src='https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js'></script>
@@ -441,6 +468,7 @@
             }
         });
     });
+    
 });
 
 </script>

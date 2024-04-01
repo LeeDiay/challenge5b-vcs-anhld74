@@ -58,14 +58,14 @@
                                                     <button type="button" class="btn btn-success btn-link viewExerciseBtn" data-bs-toggle="modal" data-bs-target="#exerciseModal" data-exercise="{{ json_encode($exercise) }}">
                                                         <i class="material-icons">visibility</i>
                                                         <div class="ripple-container"></div>
-                                                    </button> 
+                                                    </button>
                                                     @if (Auth::user()->level == 'Admin')
                                                     <button type="button" class="btn btn-warning btn-link editExerciseBtn" data-bs-toggle="modal" data-bs-target="#editExerciseModal" data-exercise="{{ json_encode($exercise) }}">
                                                         <i class="material-icons">edit</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
                                                     <button type="button" class="btn btn-danger btn-link deleteExerciseBtn" data-exercise-id="{{ $exercise->id }}">
-                                                        <i class="material-icons">close</i>
+                                                        <i class="material-icons">delete</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
                                                     @endif

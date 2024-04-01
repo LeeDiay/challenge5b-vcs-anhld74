@@ -61,7 +61,7 @@
                                                         <div class="ripple-container"></div>
                                                     </button>
                                                     <button type="button" class="btn btn-danger btn-link deleteQuizBtn" data-quiz-id="{{ $quiz->id }}">
-                                                        <i class="material-icons">close</i>
+                                                        <i class="material-icons">delete</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
                                                     @endif
