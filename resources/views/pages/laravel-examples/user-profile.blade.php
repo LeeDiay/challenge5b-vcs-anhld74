@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Thay đổi avatar</label>
-                                    <input type="file" name="avatar" class="form-control border border-2 p-2">
+                                    <input type="file" name="avatar" class="form-control border border-2 p-2" accept=".png, .jpg, .jpeg">
                                     @error('avatar')
                                         <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror

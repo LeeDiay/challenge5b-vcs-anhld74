@@ -19,14 +19,15 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|min:6|max:20|regex:/^\S*$/',
-            'name' => 'required|max:30|string',
-            'password' => 'required|min:8|string|max:255',
+            'username' => 'required|string|min:6|max:20|regex:/^[a-zA-Z0-9_]+$/',
+            'name' => 'required|max:30|string|regex:/^[a-zA-Z\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệđìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳỹỷỵÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲỸỶỴ\s]+$/u',
+            'password' => 'required|min:8|string|max:255|regex:/^\S*$/',
             'email' => 'required|email',
-            'phone' => 'max:11|string',
+            'phone' => 'max:11|string|regex:/^[0-9]+$/',
             'level' => 'required|string|in:User,Admin',
             'avatar' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048', 
         ]);
+        
 
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
             $file = $request->file('avatar');
@@ -65,15 +66,16 @@ class UserController extends Controller
     {
         $request->validate([
             'userId' => 'required|exists:users,id',
-            'username' => 'required|string|min:6|max:20|regex:/^\S*$/',
-            'name' => 'required|string|max:30',
+            'username' => 'required|string|min:6|max:20|regex:/^[a-zA-Z0-9_]+$/',
+            'name' => 'required|string|max:30|regex:/^[a-zA-Z\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệđìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳỹỷỵÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲỸỶỴ\s]+$/u',
             'email' => 'required|email',
-            'phone' => 'nullable|string|max:11',
+            'phone' => 'nullable|string|regex:/^[0-9]+$/|max:11',
             'location' => 'nullable|string|max:255',
             'about' => 'nullable|string',
             'level' => 'required|string|in:User,Admin',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+        
 
         $userData = [
             'username' => $request->username,

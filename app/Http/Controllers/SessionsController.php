@@ -32,13 +32,7 @@ class SessionsController extends Controller
     
         session()->regenerate();
     
-        // Kiểm tra cấp độ của người dùng sau khi đăng nhập
-        $user = auth()->user();
-        if ($user->level === 'Admin') {
-            return redirect('/dashboard');
-        } else {
-            return redirect('/exercises-management');
-        }
+        return redirect('/dashboard');
     }
     
 

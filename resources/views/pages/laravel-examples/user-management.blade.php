@@ -142,7 +142,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="avatar" class="form-label">Chọn avatar</label>
-                        <input type="file" class="form-control border border-2 p-2" id="avatar" name="avatar" class="form-control">
+                        <input type="file" class="form-control border border-2 p-2" id="avatar" name="avatar" class="form-control" accept=".png, .jpg, .jpeg">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -219,7 +219,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="avatar" class="form-label">Chọn avatar mới:</label>
-                        <input type="file" class="form-control border border-2 p-2" id="editAvatar" name="avatar" class="form-control">
+                        <input type="file" class="form-control border border-2 p-2" id="editAvatar" name="avatar" class="form-control" accept=".png, .jpg, .jpeg">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -379,7 +379,7 @@
                     // Xử lý lỗi AJAX
                     Swal.fire(
                         'Đã xảy ra lỗi!',
-                        'Username hoặc Email đã tồn tại (Chú ý: Độ dài Username tối thiểu 6 kí tự, tối đa 20 kí tự và không chứa dấu cách.)',
+                        'Username hoặc Email đã tồn tại (Chú ý: Độ dài Username tối thiểu 6 kí tự, tối đa 20 kí tự và không chứa dấu cách, kí tự đặc biệt.)',
                         'error'
                     );
                     console.error(xhr.responseText);

@@ -18,8 +18,8 @@ class ProfileController extends Controller
         $user = $request->user();
         $attributes = $request->validate([
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'name' => 'required|max:30',
-            'phone' => 'required|max:10',
+            'name' => 'required|max:30|regex:/^[a-zA-Z\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệđìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳỹỷỵÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲỸỶỴ\s]+$/u',
+            'phone' => 'required|max:11|regex:/^[0-9]+$/',
             'about' => 'max:150',
             'location' => 'max:300',
             'avatar' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048'

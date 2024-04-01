@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Exercise;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Support\Facades\Auth;
+
 class ExerciseController extends Controller
 {
     public function index()
@@ -23,7 +25,7 @@ class ExerciseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|regex:/^[a-zA-Z0-9_\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệđìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳỹỷỵÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲỸỶỴ\s]+$/u',
             'description' => 'string',
             'duration' => 'required|date',
             'file' => 'sometimes|mimes:pdf,docx', 
@@ -31,9 +33,12 @@ class ExerciseController extends Controller
         $fileName = null;
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
             $file = $request->file('file');
-            $fileName = uniqid('file_') . '.' . $file->getClientOriginalExtension();
+            $originalName = $file->getClientOriginalName(); // Lấy tên gốc của tệp tin
+            $extension = $file->getClientOriginalExtension(); // Lấy phần mở rộng của tệp tin
+            $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '.' . $extension; // Tên và phần mở rộng gốc
             $file->move(public_path('files/upload/'), $fileName);
-        } 
+        }
+        
 
         $exerciseData = [
             'name' => $request->name,
@@ -50,7 +55,6 @@ class ExerciseController extends Controller
                 'status' => 200,
             ]);
         } else {
-            // lỗi
             return response()->json([
                 'status' => 500,
             ]);
@@ -60,7 +64,7 @@ class ExerciseController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|regex:/^[a-zA-Z0-9_\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệđìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳỹỷỵÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲỸỶỴ\s]+$/u',
             'description' => 'string',
             'duration' => 'required|date',
             'file' => 'sometimes|mimes:pdf,docx',
@@ -76,12 +80,13 @@ class ExerciseController extends Controller
 
         $oldFileName = $exercise->file; 
 
-        $fileName = null;
+        $fileName = $exercise->file;
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
             $file = $request->file('file');
-            $fileName = uniqid('file_') . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('files/upload/'), $fileName);           
-            unlink(public_path('files/upload/' . $oldFileName));
+            $originalName = $file->getClientOriginalName(); // Lấy tên gốc của tệp tin
+            $extension = $file->getClientOriginalExtension(); // Lấy phần mở rộng của tệp tin
+            $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '.' . $extension; // Tên và phần mở rộng gốc
+            $file->move(public_path('files/upload/'), $fileName);
         }
 
         $exerciseData = [
@@ -123,6 +128,37 @@ class ExerciseController extends Controller
                 'status' => 500,
                 'message' => 'Không tìm thấy bài tập.',
             ]);
+        }
+    }
+
+    public function submit(Request $request)
+    {
+        // Validate request data
+        $request->validate([
+            'exerciseId' => 'required',
+            'file' => 'required|file|mimes:pdf,docx|max:10240', // Max file size: 10MB
+        ]);
+
+        // Retrieve the Exercise instance
+        $submit = Exercise::find($request->exerciseId);
+
+        // Check if the Exercise instance exists
+        if ($submit) {
+            // Save additional data to the Exercise instance
+            $submit->user_id = Auth::user()->id;
+            // Save the Exercise instance
+            $submit->save();
+
+            // Return success response
+            return response()->json([
+                'status' => 200,
+            ]);
+        } else {
+            // Return error response if Exercise instance not found
+            return response()->json([
+                'status' => 404,
+                'message' => 'Exercise not found.',
+            ], 404);
         }
     }
 

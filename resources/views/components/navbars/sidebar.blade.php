@@ -6,16 +6,24 @@
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
-        <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{ route('dashboard') }} ">
+        <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{ route('dashboard') }}">
             <img src="{{ asset('assets') }}/img/vcslogo.png" class="navbar-brand-img h-100" alt="main_logo">
-            <span class="ms-2 font-weight-bold text-white">Hệ thống quản lí sinh viên</span>
+            <span class="ms-2 font-weight-bold text-white">Hệ thống quản lí học tập VCS</span>
         </a>
     </div>
     <hr class="horizontal light mt-0 mb-2">
+    <div class="sidenav-header">
+        <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+        <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href="{{ route('user-profile') }}">
+            <img src="assets/img/avatar_user/{{ auth()->user()->avatar }}" class="navbar-brand-img h-100 rounded-circle" alt="main_logo" style="width: 40px; height: 50px;">
+            <span class="ms-2 font-weight-bold text-white">{{ auth()->user()->name }}</span>
+        </a>
+    </div>
+
+
+    <hr class="horizontal light mt-0 mb-2">
     <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
         <ul class="navbar-nav">
-
-            @if (Auth::user()->level == 'Admin')
             <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'dashboard' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('dashboard') }}">
@@ -25,7 +33,6 @@
                     <span class="nav-link-text ms-1">Trang chủ</span>
                 </a>
             </li>
-            @endif
 
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Tài khoản</h6>
@@ -45,7 +52,7 @@
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i style="font-size: 1rem;" class="fas fa-lg fa-list-ul ps-2 pe-2 text-center"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Danh sách người dùng</span>
+                    <span class="nav-link-text ms-1">Danh sách sinh viên</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -58,7 +65,7 @@
             </li>
 
             <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Bài tập</h6>
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Học tập</h6>
             </li>
             
             <li class="nav-item">

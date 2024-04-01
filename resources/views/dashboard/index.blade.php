@@ -42,6 +42,7 @@
                         </div>
                     </div>
                 </div>
+                @if (Auth::user()->level == 'Admin')
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">
                         <div class="card-header p-3 pt-2">
@@ -50,7 +51,7 @@
                                 <i class="material-icons opacity-10">group_add</i>
                             </div>
                             <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Người dùng mới hôm nay</p>
+                                <p class="text-sm mb-0 text-capitalize">Sinh viên mới hôm nay</p>
                                 <h4 class="mb-0 new-users-count">0</h4>
                             </div>
                             <script>
@@ -74,6 +75,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">
                         <div class="card-header p-3 pt-2">
