@@ -33,7 +33,6 @@
                                     </thead>
                                     <tbody>
                                         @foreach($users as $key => $user)
-                                            @if(Auth::user()->level != 'User' || ($user->level != 'Admin'))
                                                 <tr>
                                                     <td>
                                                         <div class="d-flex px-2 py-1">
@@ -82,7 +81,6 @@
                                                         @endif
                                                     </td>
                                                 </tr>
-                                            @endif
                                         @endforeach
 
                                         
