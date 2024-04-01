@@ -133,28 +133,21 @@ class ExerciseController extends Controller
 
     public function submit(Request $request)
     {
-        // Validate request data
         $request->validate([
             'exerciseId' => 'required',
-            'file' => 'required|file|mimes:pdf,docx|max:10240', // Max file size: 10MB
+            'file' => 'required|file|mimes:pdf,docx|max:10240',
         ]);
 
-        // Retrieve the Exercise instance
         $submit = Exercise::find($request->exerciseId);
 
-        // Check if the Exercise instance exists
         if ($submit) {
-            // Save additional data to the Exercise instance
             $submit->user_id = Auth::user()->id;
-            // Save the Exercise instance
             $submit->save();
 
-            // Return success response
             return response()->json([
                 'status' => 200,
             ]);
         } else {
-            // Return error response if Exercise instance not found
             return response()->json([
                 'status' => 404,
                 'message' => 'Exercise not found.',
