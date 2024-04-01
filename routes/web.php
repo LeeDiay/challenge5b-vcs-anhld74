@@ -1,6 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,18 +21,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\SessionsController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ExerciseController;
-            
-
 Route::get('/', function () {return redirect('sign-in');})->middleware('guest');
 Route::get('/home', function () {return redirect('dashboard');})->middleware('auth');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
@@ -33,43 +29,12 @@ Route::post('sign-up', [RegisterController::class, 'store'])->middleware('guest'
 Route::get('sign-in', [SessionsController::class, 'create'])->middleware('guest')->name('login');
 Route::post('sign-in', [SessionsController::class, 'store'])->middleware('guest');
 Route::post('verify', [SessionsController::class, 'show'])->middleware('guest');
-Route::post('reset-password', [SessionsController::class, 'update'])->middleware('guest')->name('password.update');
-Route::get('verify', function () {
-	return view('sessions.password.verify');
-})->middleware('guest')->name('verify'); 
-Route::get('/reset-password/{token}', function ($token) {
-	return view('sessions.password.reset', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
-
-
 
 Route::group(['middleware' => 'auth'], function () {
+	// user route
 	Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
 	Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')->name('profile');
 	Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
-
-	// exercise route
-	Route::get('exercises-management', [ExerciseController::class, 'index'])->name('exercises-management');
-	Route::get('/exercise/{id}', [ExerciseController::class, 'show'])->name('exercise.detail');
-	Route::post('/exercises-store', [ExerciseController::class, 'store'])->name('exercises.store');
-	Route::post('/exercises-update', [ExerciseController::class, 'update'])->name('exercises.update');
-	Route::post('/exercises-submit', [ExerciseController::class, 'submit'])->name('exercises.submit');
-	// Route::post('exercises-management', [ExerciseController::class, 'submit'])->name('exercises.submit');
-
-	Route::delete('/exercises-delete', [ExerciseController::class, 'destroy'])->name('exercises.delete');
-	Route::get('/total-exercises-count', [ExerciseController::class, 'getTotalExercisesCount']);
-
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
-	Route::get('static-sign-in', function () {
-		return view('pages.static-sign-in');
-	})->name('static-sign-in');
-	Route::get('static-sign-up', function () {
-		return view('pages.static-sign-up');
-	})->name('static-sign-up');
-
-	// user route
 	Route::get('user-management', [ProfileController::class, 'index'])->name('user-management');
 	Route::get('user-profile', function () {
 		return view('pages.laravel-examples.user-profile');
@@ -83,5 +48,37 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/change-password', [UserController::class, 'changePassword']);
 	Route::get('/new-users-count', [UserController::class, 'getNewUsersCount']);
 	Route::get('/total-users-count', [UserController::class, 'getTotalUsersCount']);
+
+	// exercise route
+	Route::get('exercises-management', [ExerciseController::class, 'index'])->name('exercises-management');
+	Route::get('/exercise/{id}', [ExerciseController::class, 'show'])->name('exercise.detail');
+	Route::post('/exercises-store', [ExerciseController::class, 'store'])->name('exercises.store');
+	Route::post('/exercises-update', [ExerciseController::class, 'update'])->name('exercises.update');
+	Route::post('/exercises-submit', [ExerciseController::class, 'submit'])->name('exercises.submit');
+	Route::delete('/exercises-delete', [ExerciseController::class, 'destroy'])->name('exercises.delete');
+	Route::get('/total-exercises-count', [ExerciseController::class, 'getTotalExercisesCount']);
+
+	//quiz route
+	Route::get('quiz-management', [QuizController::class, 'index'])->name('quiz-management');
+	Route::post('/quiz-store', [QuizController::class, 'store'])->name('quiz.store');
+	Route::post('/quiz-update', [QuizController::class, 'update'])->name('quiz.update');
+	Route::delete('/quiz-delete', [QuizController::class, 'destroy'])->name('quiz.delete');
+	Route::post('/quiz-submit', [QuizController::class, 'submit'])->name('quiz.submit');
+
+	//message route
+	Route::get('/messages', [MessageController::class, 'index'])->name('messages');
+	Route::post('/messages-send', [MessageController::class, 'send'])->name('messages.send');
+
+
+
+	Route::get('notifications', function () {
+		return view('pages.notifications');
+	})->name('notifications');
+	Route::get('static-sign-in', function () {
+		return view('pages.static-sign-in');
+	})->name('static-sign-in');
+	Route::get('static-sign-up', function () {
+		return view('pages.static-sign-up');
+	})->name('static-sign-up');
 
 });

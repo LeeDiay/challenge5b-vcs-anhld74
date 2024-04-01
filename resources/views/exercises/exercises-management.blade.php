@@ -58,14 +58,14 @@
                                                     <button type="button" class="btn btn-success btn-link viewExerciseBtn" data-bs-toggle="modal" data-bs-target="#exerciseModal" data-exercise="{{ json_encode($exercise) }}">
                                                         <i class="material-icons">visibility</i>
                                                         <div class="ripple-container"></div>
-                                                    </button> 
+                                                    </button>
                                                     @if (Auth::user()->level == 'Admin')
                                                     <button type="button" class="btn btn-warning btn-link editExerciseBtn" data-bs-toggle="modal" data-bs-target="#editExerciseModal" data-exercise="{{ json_encode($exercise) }}">
                                                         <i class="material-icons">edit</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
                                                     <button type="button" class="btn btn-danger btn-link deleteExerciseBtn" data-exercise-id="{{ $exercise->id }}">
-                                                        <i class="material-icons">close</i>
+                                                        <i class="material-icons">delete</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
                                                     @endif
@@ -186,6 +186,18 @@
             </div>
             <div class="modal-body">
                 <div id="exerciseInfo"></div>
+                <form method="POST" id="submitExerciseForm" action="#" enctype="multipart/form-data">
+                    @csrf
+                        <input type="hidden" id="exerciseId" name="exerciseId" value="">
+                        <div class="mb-3">
+                            <label for="file" class="form-label"><strong>Nộp bài làm:</strong></label>
+                            <input type="file" class="form-control border border-2 p-2" id="file" name="file" accept=".pdf, .docx">
+                        </div>
+                        <div class="modal-footer mb-3">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-success" id="submitExerciseBtn">Gửi bài tập</button>
+                        </div>
+                </form>
             </div>
             
         </div>
@@ -260,18 +272,7 @@
                         <p><strong>Ngày hết hạn:</strong> ${formattedDate}</p>
                         <p><strong>Thời gian còn lại:</strong> ${timeLeft}</p>
                         ${timeRemaining > 0 ? `
-                        <form method="POST" id="submitExerciseForm" action="#" enctype="multipart/form-data">
-                        @csrf
-                            <input type="hidden" id="exerciseId" name="exerciseId" value="">
-                            <div class="mb-3">
-                                <label for="file" class="form-label"><strong>Nộp bài làm:</strong></label>
-                                <input type="file" class="form-control border border-2 p-2" id="file" name="file" accept=".pdf, .docx">
-                            </div>
-                            <div class="modal-footer mb-3">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                <button type="submit" class="btn btn-success" id="submitExerciseBtn">Gửi bài tập</button>
-                            </div>
-                        </form>` : ''}
+                        ` : ''}
                     </div>
                 </div>
             `;
