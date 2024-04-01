@@ -382,7 +382,7 @@
                             // Hiển thị thông báo đáp án chính xác kèm nội dung của file
                             Swal.fire({
                                 title: 'Đáp án chính xác!!',
-                                html: '<pre>' + 'Nội dung:<br></br>' + response.content ,
+                                html: '<pre>' + '<strong>Nội dung:<strong><p></p>' + response.content ,
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             });
