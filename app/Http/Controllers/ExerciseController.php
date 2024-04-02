@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Exercise;
+use App\Models\SubmitExercise;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Auth;
 
@@ -138,22 +139,38 @@ class ExerciseController extends Controller
             'file' => 'required|file|mimes:pdf,docx|max:10240',
         ]);
 
-        $submit = Exercise::find($request->exerciseId);
-
-        if ($submit) {
-            $submit->user_id = Auth::user()->id;
-            $submit->save();
-
-            return response()->json([
-                'status' => 200,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Exercise not found.',
-            ], 404);
+        if ($request->hasFile('file') && $request->file('file')->isValid()) {
+            $file = $request->file('file');
+            $originalName = $file->getClientOriginalName(); 
+            $extension = $file->getClientOriginalExtension(); 
+            $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '.' . $extension; 
+            $file->move(public_path('files/submit/'), $fileName);
         }
+
+        $submit = new SubmitExercise();
+        $submit->user_id = Auth::user()->id;
+        $submit->exercise_id = $request->exerciseId;
+        $submit->file = $fileName;
+        $submit->save();
+
+        return response()->json([
+            'status' => 200,
+        ]);
     }
+
+    public function getSubmittedExercises($exerciseId)
+{
+    // Lấy danh sách các bài tập đã nộp cho bài tập được chỉ định
+    $submittedExercises = SubmitExercise::where('exercise_id', $exerciseId)
+                                        ->whereNotNull('file') // Chỉ lấy các bài đã nộp
+                                        ->with('user')
+                                        ->get();
+
+    return response()->json([
+        'status' => 200,
+        'submittedExercises' => $submittedExercises,
+    ]);
+}
 
     public function getTotalExercisesCount()
     {

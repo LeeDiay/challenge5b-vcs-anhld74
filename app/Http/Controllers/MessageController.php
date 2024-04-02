@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
 
 class MessageController extends Controller
 {
@@ -47,4 +47,16 @@ class MessageController extends Controller
 
         return response()->json(['messages' => $messages]);
     }
+
+    public function getNewMessagesCount()
+    {
+        $receiverId = Auth::user()->id; 
+
+        $newMessagesCount = Message::where('receiver_id', $receiverId)
+                                    ->whereDate('created_at', Carbon::today())
+                                    ->count();
+
+        return response()->json(['new_messages_count' => $newMessagesCount]);
+    }
+
 }

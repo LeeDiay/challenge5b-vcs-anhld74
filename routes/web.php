@@ -54,6 +54,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/exercises-store', [ExerciseController::class, 'store'])->name('exercises.store');
 	Route::post('/exercises-update', [ExerciseController::class, 'update'])->name('exercises.update');
 	Route::post('/exercises-submit', [ExerciseController::class, 'submit'])->name('exercises.submit');
+	// Route::get('/get-submit', [ExerciseController::class, 'getSubmittedExercises'])->name('get.submit');
+	Route::get('/exercise/{exerciseId}/submitted', [ExerciseController::class, 'getSubmittedExercises'])->name('get.submit');
+
+
 	Route::delete('/exercises-delete', [ExerciseController::class, 'destroy'])->name('exercises.delete');
 	Route::get('/total-exercises-count', [ExerciseController::class, 'getTotalExercisesCount']);
 
@@ -69,12 +73,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/messages', [MessageController::class, 'index'])->name('messages');
 	Route::post('/message-send', [MessageController::class, 'send'])->name('message.send');
 	Route::get('/message-history', [MessageController::class, 'getMessageHistory'])->name('message.history');
+	Route::get('/new-messages-count', [MessageController::class, 'getNewMessagesCount']);
 
-
-
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
 	Route::get('static-sign-in', function () {
 		return view('pages.static-sign-in');
 	})->name('static-sign-in');

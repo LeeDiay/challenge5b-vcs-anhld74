@@ -41,5 +41,29 @@ class SubmitExerciseController extends Controller
             ], 404);
         }
     }
+    
+    // public function submit(Request $request)
+    // {
+    //     $request->validate([
+    //         'exerciseId' => 'required',
+    //         'file' => 'required|file|mimes:pdf,docx|max:10240',
+    //     ]);
+
+    //     $submit = Exercise::find($request->exerciseId);
+
+    //     if ($submit) {
+    //         $submit->user_id = Auth::user()->id;
+    //         $submit->save();
+
+    //         return response()->json([
+    //             'status' => 200,
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'Exercise not found.',
+    //         ], 404);
+    //     }
+    // }
 
 }

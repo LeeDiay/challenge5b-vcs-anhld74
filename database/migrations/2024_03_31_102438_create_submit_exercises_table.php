@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('submit_exercises', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->unsignedBigInteger('user_id')->nullable(); 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade'); // Tạo khóa ngoại
             $table->unsignedBigInteger('exercise_id')->nullable(); 
             $table->foreign('exercise_id')->references('id')->on('exercises')->onUpdate('cascade')->onDelete('cascade');
             $table->string('file')->nullable();
+            $table->timestamps();
         });
     }
 

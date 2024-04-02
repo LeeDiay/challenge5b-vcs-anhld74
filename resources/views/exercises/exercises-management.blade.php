@@ -191,7 +191,7 @@
                         <input type="hidden" id="exerciseId" name="exerciseId" value="">
                         <div class="mb-3">
                             <label for="file" class="form-label"><strong>Nộp bài làm:</strong></label>
-                            <input type="file" class="form-control border border-2 p-2" id="file" name="file" accept=".pdf, .docx">
+                            <input type="file" class="form-control border border-2 p-2" id="file" name="file" accept=".pdf, .docx" required>
                         </div>
                         <div class="modal-footer mb-3">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -220,7 +220,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-success" id="submitExerciseBtn">Xem bài nộp</button>
+                <button type="submit" class="btn btn-success" id="getExerciseBtn">Xem bài nộp</button>
             </div>
         </div>
     </div>
@@ -240,6 +240,7 @@
     document.querySelectorAll('.viewExerciseBtn').forEach(button => {
         button.addEventListener('click', function() {
         const exerciseData = JSON.parse(this.getAttribute('data-exercise'));
+        document.getElementById('exerciseId').value = exerciseData.id;
          
         // Chuyển đổi định dạng ngày
         const deadline = new Date(exerciseData.duration);
@@ -259,7 +260,7 @@
        // Hiển thị thông tin bài tập trong modal cho User
         @if (Auth::user()->level === 'User')
             document.getElementById('exerciseInfo').innerHTML = `
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content">
                     <div>
                         <p></p>
                         <p><strong>Tên bài tập:</strong> ${formatNullOrUndefined(exerciseData.name)}</p>
@@ -270,18 +271,16 @@
                                 'Chưa cập nhật'}
                         </p>
                         <p><strong>Ngày hết hạn:</strong> ${formattedDate}</p>
-                        <p><strong>Thời gian còn lại:</strong> ${timeLeft}</p>
-                        ${timeRemaining > 0 ? `
-                        ` : ''}
+                        <p><strong>Thời gian còn lại:</strong> ${timeLeft}</p>                     
                     </div>
                 </div>
             `;
         @endif
-        document.getElementById('exerciseId').value = exerciseData.id;
+        
         // Hiển thị thông tin bài tập trong modal cho Admin
         @if (Auth::user()->level === 'Admin')
             document.getElementById('exerciseInfo').innerHTML = `
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content">
                     <div>
                         <p></p>
                         <p><strong>Tên bài tập:</strong> ${formatNullOrUndefined(exerciseData.name)}</p>
@@ -490,6 +489,64 @@
                         console.error(xhr.responseText);
                         $("#submitExerciseBtn").text('Nộp');
                     }
+                });
+            });
+
+            $(document).ready(function() {
+                // Xử lý khi giáo viên nhấn vào nút "Xem bài nộp"
+                $('#getExerciseBtn').click(function() {
+                    var exerciseId = $('#exerciseId').val();
+
+                    $.ajax({
+                        url: '{{ route("get.submit", ["exerciseId" => ":exerciseId"]) }}'.replace(':exerciseId', exerciseId),
+                        type: 'GET',
+                        success: function(response) {
+                            if (response.status === 200) {
+                                // Hiển thị danh sách các bài tập đã nộp lên modal
+                                var submittedExercisesHtml = '<div><p><strong>Danh sách sinh viên đã nộp:</strong></p><ul>';
+                                response.submittedExercises.forEach(function(submittedExercise) {
+                                    submittedExercisesHtml += '<li>' + submittedExercise.user.name + ' <button class="btn btn-primary btn-sm viewBtn" data-file="' + submittedExercise.file + '">Xem</button> <button class="btn btn-primary btn-sm downloadBtn" data-file="' + submittedExercise.file + '">Tải xuống</button></li>';
+                                });
+                                submittedExercisesHtml += '</ul></div>';
+
+                                $('#exerciseInfo').html(submittedExercisesHtml);
+                            }
+                        }
+                    });
+                });
+
+                $(document).on('click', '.viewBtn', function() {
+                    var file = $(this).data('file');
+                    var url = '/files/submit/' + file;
+
+                    // Mở tệp bài tập trong cửa sổ mới
+                    window.open(url, '_blank');
+                });
+
+                $(document).on('click', '.downloadBtn', function() {
+                    var file = $(this).data('file');
+                    var url = '/files/submit/' + file;
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', url, true);
+                    xhr.responseType = 'blob';
+
+                    xhr.onload = function() {
+                        if (this.status === 200) {
+                            // Tạo một URL cho blob
+                            var blob = new Blob([xhr.response], { type: xhr.getResponseHeader('content-type') });
+                            var objectUrl = URL.createObjectURL(blob);
+
+                            var a = document.createElement('a');
+                            a.href = objectUrl;
+                            a.download = file;
+                            a.click();
+
+                            URL.revokeObjectURL(objectUrl);
+                        }
+                    };
+
+                    xhr.send();
                 });
             });
 

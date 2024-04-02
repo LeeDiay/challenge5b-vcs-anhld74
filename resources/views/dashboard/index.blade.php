@@ -151,19 +151,18 @@
                             </div>  
                             <div class="text-end pt-1">
                                 <p class="text-sm mb-0 text-capitalize">Tin nhắn mới trong ngày</p>
-                                <h4 class="mb-0 total-message-count">0</h4>
+                                <h4 class="mb-0 new-messages-count">0</h4>
                             </div>
                             <script>
                                 $(document).ready(function() {
-                                    // Lấy tổng số quiz
                                     $.ajax({
-                                        url: '/total-quizzes-count',
+                                        url: '/new-messages-count',
                                         type: 'GET',
                                         success: function(response) {
-                                            $('.total-quizzes-count').text(response.total_quizzes_count);
+                                            $('.new-messages-count').text(response.new_messages_count);
                                         },
                                         error: function(xhr) {
-                                            console.log(xhr.responseText); // Xử lý lỗi nếu có
+                                            console.log(xhr.responseText); 
                                         }
                                     });
                                 });
