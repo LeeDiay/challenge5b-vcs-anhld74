@@ -505,7 +505,7 @@
                                 // Hiển thị danh sách các bài tập đã nộp lên modal
                                 var submittedExercisesHtml = '<div><p><strong>Danh sách sinh viên đã nộp:</strong></p><ul>';
                                 response.submittedExercises.forEach(function(submittedExercise) {
-                                    submittedExercisesHtml += '<li>' + submittedExercise.user.name + ' <button class="btn btn-primary btn-sm viewBtn" data-file="' + submittedExercise.file + '">Xem</button> <button class="btn btn-primary btn-sm downloadBtn" data-file="' + submittedExercise.file + '">Tải xuống</button></li>';
+                                    submittedExercisesHtml += '<li>' + submittedExercise.user.username + ' - ' + submittedExercise.user.name + ' <button class="btn btn-primary btn-sm viewBtn" data-file="' + submittedExercise.file + '">Xem</button> <button class="btn btn-primary btn-sm downloadBtn" data-file="' + submittedExercise.file + '">Tải xuống</button></li>';
                                 });
                                 submittedExercisesHtml += '</ul></div>';
 
