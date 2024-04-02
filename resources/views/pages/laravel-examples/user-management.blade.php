@@ -236,23 +236,31 @@
  <!-- Kết thúc Modal edit thông tin -->
 
  <!-- Modal hiển thị tin nhắn -->
-<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+ <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="messageModalLabel">Tin nhắn</h5>
+                <h5 class="modal-title" id="messageModalLabel">Lịch sử tin nhắn</h5>
                 <button type="button" class="btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Nội dung tin nhắn sẽ được hiển thị ở đây -->
-                <div id="messageContent"></div>
+                <!-- Danh sách tin nhắn cũ -->
+                <ul id="messageHistory" class="list-group"></ul>
+                
+                <!-- Form để gửi tin nhắn mới -->
+                <form id="sendMessageForm">
+                    <input type="hidden" id="receiverId" name="receiverId" value="">
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Tin nhắn mới:</label>
+                        <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary" id="sendMessageBtn">Gửi tin nhắn</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <!-- Nút sửa và xóa tin nhắn -->
-                <button type="button" class="btn btn-primary" id="editMessageBtn">Sửa tin nhắn</button>
-                <button type="button" class="btn btn-danger" id="deleteMessageBtn">Xóa tin nhắn</button>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -299,6 +307,7 @@
             `;
         });
     });
+    document.getElementById('receiverId').value = userData.id;
 
     //  <!-- Hiển thị thông tin cũ trước khi edit -->
     document.querySelectorAll('.editUserBtn').forEach(button => {
@@ -465,6 +474,79 @@
                         console.error(xhr.responseText);
                     }
                 });
+            }
+        });
+    });
+
+    // Xử lý sự kiện click trên nút "Chat"
+    document.querySelectorAll('.chatUserBtn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Lấy thông tin người dùng từ thuộc tính data-user
+            const userData = JSON.parse(this.getAttribute('data-user'));
+            const userId = userData.id; // ID của người dùng mà bạn muốn chat
+
+            // Gửi yêu cầu AJAX để lấy lịch sử tin nhắn giữa hai người dùng
+            $.ajax({
+                url: '{{ route('message.history') }}',
+                method: 'GET',
+                data: { userId: userId },
+                dataType: 'json',
+                success: function(response) {
+                    // Xử lý kết quả trả về và hiển thị lịch sử tin nhắn trong modal
+                    const messages = response.messages;
+                    const messageList = document.getElementById('messageHistory');
+                    messageList.innerHTML = ''; // Xóa nội dung cũ
+
+                    if (messages.length > 0) {
+                        messages.forEach(message => {
+                            // Hiển thị mỗi tin nhắn trong danh sách
+                            const listItem = document.createElement('li');
+                            listItem.classList.add('list-group-item');
+                            listItem.textContent = message.content;
+                            messageList.appendChild(listItem);
+                        });
+                    } else {
+                        // Hiển thị thông báo khi không có tin nhắn nào
+                        const emptyMessage = document.createElement('li');
+                        emptyMessage.classList.add('list-group-item');
+                        emptyMessage.textContent = 'Không có tin nhắn.';
+                        messageList.appendChild(emptyMessage);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý lỗi AJAX
+                    console.error('Đã xảy ra lỗi:', error);
+                }
+            });
+        });
+    });
+
+    document.getElementById('sendMessageBtn').addEventListener('click', function() {
+        // Lấy nội dung tin nhắn từ form
+        e.preventDefault();
+        const messageContent = document.getElementById('message').value;
+        
+        // Lấy token CSRF từ trang
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        // Thực hiện gửi tin nhắn bằng AJAX
+        $.ajax({
+            url: '{{ route('message.send') }}',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken // Bao gồm token CSRF trong header của yêu cầu
+            },
+            data: {
+                message: messageContent
+            },
+            dataType: 'json',
+            success: function(response) {
+                // Xử lý kết quả trả về (nếu cần)
+                // Ví dụ: cập nhật giao diện để hiển thị tin nhắn đã gửi thành công
+            },
+            error: function(xhr, status, error) {
+                // Xử lý lỗi AJAX (nếu cần)
+                console.error('Đã xảy ra lỗi:', error);
             }
         });
     });

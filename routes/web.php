@@ -51,7 +51,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// exercise route
 	Route::get('exercises-management', [ExerciseController::class, 'index'])->name('exercises-management');
-	Route::get('/exercise/{id}', [ExerciseController::class, 'show'])->name('exercise.detail');
 	Route::post('/exercises-store', [ExerciseController::class, 'store'])->name('exercises.store');
 	Route::post('/exercises-update', [ExerciseController::class, 'update'])->name('exercises.update');
 	Route::post('/exercises-submit', [ExerciseController::class, 'submit'])->name('exercises.submit');
@@ -64,10 +63,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/quiz-update', [QuizController::class, 'update'])->name('quiz.update');
 	Route::delete('/quiz-delete', [QuizController::class, 'destroy'])->name('quiz.delete');
 	Route::post('/quiz-submit', [QuizController::class, 'submit'])->name('quiz.submit');
+	Route::get('/total-quizzes-count', [QuizController::class, 'getTotalQuizzesCount']);
 
 	//message route
 	Route::get('/messages', [MessageController::class, 'index'])->name('messages');
-	Route::post('/messages-send', [MessageController::class, 'send'])->name('messages.send');
+	Route::post('/message-send', [MessageController::class, 'send'])->name('message.send');
+	Route::get('/message-history', [MessageController::class, 'getMessageHistory'])->name('message.history');
 
 
 

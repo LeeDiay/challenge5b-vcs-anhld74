@@ -31,7 +31,6 @@ class QuizController extends Controller
             $file->move(public_path('files/quiz/'), $fileName);
         }
         
-
         $exerciseData = [
             'name' => $request->name,
             'description' => $request->description,
@@ -56,7 +55,7 @@ class QuizController extends Controller
     {
         $request->validate([
             'name' => 'required|string|regex:/^[a-zA-Z0-9_\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệđìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳỹỷỵÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲỸỶỴ\s]+$/u',
-            'description' => 'string',
+            'description' => 'string|regex:/^[a-zA-Z0-9_\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệđìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳỹỷỵÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲỸỶỴ\s]+$/u',
             'file' => 'sometimes|mimes:txt',
         ]);
 
@@ -123,7 +122,7 @@ class QuizController extends Controller
     {
         $request->validate([
             'quizId' => 'required|exists:quizzes,id',
-            'answer' => 'required|string',
+            'answer' => 'required|string|regex:/^[a-zA-Z0-9_\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệđìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳỹỷỵÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲỸỶỴ\s]+$/u',
         ]);
     
         $quizId = $request->quizId;
@@ -149,4 +148,9 @@ class QuizController extends Controller
         }
     }
     
+    public function getTotalQuizzesCount()
+    {
+        $totalQuizzesCount = Quiz::count();
+        return response()->json(['total_quizzes_count' => $totalQuizzesCount]);
+    }
 }
