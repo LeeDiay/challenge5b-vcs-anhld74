@@ -37,13 +37,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
 	Route::get('user-management', [ProfileController::class, 'index'])->name('user-management');
 	Route::get('user-profile', function () {
-		return view('pages.laravel-examples.user-profile');
+		return view('pages.user.user-profile');
 	})->name('user-profile');
 	Route::post('/store', [UserController::class, 'store'])->name('store');
 	Route::post('/update', [UserController::class, 'update'])->name('update');
 	Route::delete('/delete', [UserController::class, 'destroy'])->name('delete');
 	Route::get('change-password', function () {
-		return view('pages.laravel-examples.change-password');
+		return view('pages.user.change-password');
 	})->name('change-password');
 	Route::post('/change-password', [UserController::class, 'changePassword']);
 	Route::get('/new-users-count', [UserController::class, 'getNewUsersCount']);

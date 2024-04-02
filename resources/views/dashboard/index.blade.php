@@ -141,6 +141,39 @@
                         </div>
                     </div>
                 </div>
+                <p></p><p></p>
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-header p-3 pt-2">
+                            <div
+                                class="icon icon-lg icon-shape bg-gradient-info shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                                <i class="material-icons opacity-10">mark_unread_chat_alt</i>
+                            </div>  
+                            <div class="text-end pt-1">
+                                <p class="text-sm mb-0 text-capitalize">Tin nhắn mới trong ngày</p>
+                                <h4 class="mb-0 total-message-count">0</h4>
+                            </div>
+                            <script>
+                                $(document).ready(function() {
+                                    // Lấy tổng số quiz
+                                    $.ajax({
+                                        url: '/total-quizzes-count',
+                                        type: 'GET',
+                                        success: function(response) {
+                                            $('.total-quizzes-count').text(response.total_quizzes_count);
+                                        },
+                                        error: function(xhr) {
+                                            console.log(xhr.responseText); // Xử lý lỗi nếu có
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-3">  
+                        </div>
+                    </div>
+                </div>
             </div>        
             <x-footers.auth></x-footers.auth>
         </div>

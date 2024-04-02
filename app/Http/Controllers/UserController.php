@@ -12,7 +12,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::latest()->paginate(5); 
-        return view('pages.laravel-examples.user-management', ['users' => $users]);
+        return view('pages.user.user-management', ['users' => $users]);
     }
 
     
