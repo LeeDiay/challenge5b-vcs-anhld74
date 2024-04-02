@@ -73,7 +73,7 @@
                                                             <i class="material-icons">chat</i>
                                                             <div class="ripple-container"></div>
                                                         </button>
-                                                        
+                                                       
                                                         @if (Auth::user()->level == 'Admin')
                                                             <button type="button" class="btn btn-warning btn-link editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user="{{ json_encode($user) }}">
                                                                 <i class="material-icons">edit</i>
@@ -87,7 +87,6 @@
                                                     </td>
                                                 </tr>
                                         @endforeach
-
                                         
                                     </tbody>
                                 </table>
@@ -248,11 +247,12 @@
                 <ul id="messageHistory" class="list-group"></ul>
                 
                 <!-- Form để gửi tin nhắn mới -->
-                <form id="sendMessageForm">
+                <form method="POST" id="sendMessageForm" action="#" enctype="multipart/form-data">
+                    @csrf
                     <input type="hidden" id="receiverId" name="receiverId" value="">
                     <div class="mb-3">
                         <label for="message" class="form-label">Tin nhắn mới:</label>
-                        <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                        <input type="text" class="form-control border border-2 p-2" id="message" name="message" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -260,10 +260,10 @@
                     </div>
                 </form>
             </div>
-            
         </div>
     </div>
 </div>
+<!-- Kết thúc modal hiển thị tin nhắn -->
 
 <!-- Script để xử lý sự kiện click và hiển thị modal -->
 <script src='https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js'></script>
@@ -306,8 +306,8 @@
                 </div>
             `;
         });
+
     });
-    document.getElementById('receiverId').value = userData.id;
 
     //  <!-- Hiển thị thông tin cũ trước khi edit -->
     document.querySelectorAll('.editUserBtn').forEach(button => {
@@ -424,134 +424,144 @@
 
     // Xử lý sự kiện click nút "Xóa"
     document.querySelectorAll('.deleteUserBtn').forEach(button => {
-    button.addEventListener('click', function() {
-        const userId = this.getAttribute('data-user-id');
-        Swal.fire({
-            title: 'Bạn có chắc chắn muốn xóa người dùng này?',
-            text: "Hành động này không thể hoàn tác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Xác nhận',
-            cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Lấy CSRF token từ thẻ meta
-                const csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+        button.addEventListener('click', function() {
+            const userId = this.getAttribute('data-user-id');
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa người dùng này?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Lấy CSRF token từ thẻ meta
+                    const csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
 
-                $.ajax({
-                    url: '{{ route('delete') }}',
-                    method: 'DELETE',
-                    data: { userId: userId, _token: csrfToken },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status == 200) {
-                            Swal.fire(
-                                'Thành công!',
-                                'Người dùng đã được xóa.',
-                                'success'
-                            ).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.reload();
-                                }
-                            });
-                        } else {
+                    $.ajax({
+                        url: '{{ route('delete') }}',
+                        method: 'DELETE',
+                        data: { userId: userId, _token: csrfToken },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status == 200) {
+                                Swal.fire(
+                                    'Thành công!',
+                                    'Người dùng đã được xóa.',
+                                    'success'
+                                ).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.reload();
+                                    }
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Lỗi!',
+                                    response.message || 'Có lỗi xảy ra khi xóa người dùng.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Xử lý lỗi Ajax
                             Swal.fire(
                                 'Lỗi!',
-                                response.message || 'Có lỗi xảy ra khi xóa người dùng.',
+                                'Có lỗi xảy ra khi xóa người dùng.',
                                 'error'
                             );
+                            console.error(xhr.responseText);
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        // Xử lý lỗi Ajax
-                        Swal.fire(
-                            'Lỗi!',
-                            'Có lỗi xảy ra khi xóa người dùng.',
-                            'error'
-                        );
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
     });
 
     // Xử lý sự kiện click trên nút "Chat"
     document.querySelectorAll('.chatUserBtn').forEach(button => {
         button.addEventListener('click', function() {
-            // Lấy thông tin người dùng từ thuộc tính data-user
             const userData = JSON.parse(this.getAttribute('data-user'));
-            const userId = userData.id; // ID của người dùng mà bạn muốn chat
-
-            // Gửi yêu cầu AJAX để lấy lịch sử tin nhắn giữa hai người dùng
+            const receiverId = userData.id; 
+            document.getElementById('receiverId').value = receiverId;
             $.ajax({
                 url: '{{ route('message.history') }}',
                 method: 'GET',
-                data: { userId: userId },
+                data: { receiverId: receiverId },
                 dataType: 'json',
                 success: function(response) {
-                    // Xử lý kết quả trả về và hiển thị lịch sử tin nhắn trong modal
-                    const messages = response.messages;
+                    const messages = response.messages.slice(-10); // Lấy 10 tin nhắn gần đây nhất
                     const messageList = document.getElementById('messageHistory');
-                    messageList.innerHTML = ''; // Xóa nội dung cũ
+                    messageList.innerHTML = ''; 
 
                     if (messages.length > 0) {
                         messages.forEach(message => {
-                            // Hiển thị mỗi tin nhắn trong danh sách
                             const listItem = document.createElement('li');
                             listItem.classList.add('list-group-item');
-                            listItem.textContent = message.content;
+                            if (message.sender_id == receiverId) {
+                                listItem.classList.add('text-start'); 
+                            } else {
+                                listItem.classList.add('text-end'); 
+                            }
+                            listItem.textContent =  message.content;
                             messageList.appendChild(listItem);
                         });
                     } else {
-                        // Hiển thị thông báo khi không có tin nhắn nào
                         const emptyMessage = document.createElement('li');
                         emptyMessage.classList.add('list-group-item');
-                        emptyMessage.textContent = 'Không có tin nhắn.';
+                        emptyMessage.textContent = 'Chưa có tin nhắn nào...!';
                         messageList.appendChild(emptyMessage);
                     }
                 },
                 error: function(xhr, status, error) {
-                    // Xử lý lỗi AJAX
                     console.error('Đã xảy ra lỗi:', error);
                 }
             });
         });
     });
 
-    document.getElementById('sendMessageBtn').addEventListener('click', function() {
-        // Lấy nội dung tin nhắn từ form
+
+    $("#sendMessageForm").submit(function(e) {
         e.preventDefault();
-        const messageContent = document.getElementById('message').value;
-        
-        // Lấy token CSRF từ trang
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        
-        // Thực hiện gửi tin nhắn bằng AJAX
+        const fd = new FormData(this);
+        $("#sendMessageBtn").text('Đang gửi...');
+        const receiverId = $("#receiverId").val();
+        const csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+        fd.append('receiverId', receiverId);
+        fd.append('_token', csrfToken); 
         $.ajax({
-            url: '{{ route('message.send') }}',
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken // Bao gồm token CSRF trong header của yêu cầu
-            },
-            data: {
-                message: messageContent
-            },
+            url: '{{ route('message.send') }}', 
+            method: 'post',
+            data: fd,
+            cache: false,
+            contentType: false,
+            processData: false,
             dataType: 'json',
             success: function(response) {
-                // Xử lý kết quả trả về (nếu cần)
-                // Ví dụ: cập nhật giao diện để hiển thị tin nhắn đã gửi thành công
+                if (response.status == 200) {
+                    Swal.fire(
+                        'Thành công',
+                        'Tin nhắn đã được gửi!',
+                        'success'
+                    ).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });    
+                }
             },
             error: function(xhr, status, error) {
-                // Xử lý lỗi AJAX (nếu cần)
-                console.error('Đã xảy ra lỗi:', error);
+                Swal.fire(
+                    'Đã xảy ra lỗi!',
+                    'Gửi tin nhắn thất bại!!',
+                    'error'
+                );
+                console.error(xhr.responseText);
+                $("#sendMessageBtn").text('Gửi tin nhắn');
             }
         });
     });
     
-});
-
 </script>
 

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Message;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 
 class MessageController extends Controller
 {
@@ -16,30 +19,32 @@ class MessageController extends Controller
     public function send(Request $request)
     {
         $request->validate([
-            'receiverId' => 'required',
-            'message' => 'required',
+            'receiverId' => 'required|exists:users,id',
+            'message' => 'required|string',
         ]);
 
-        $message->sender_id = Auth::id();
-        $message->receiver_id = $request->input('receiverId');
-        $message->content = $request->input('message');
+        $message = new Message();
+        $message->sender_id = Auth::user()->id;
+        $message->receiver_id = $request->receiverId;
+        $message->content = $request->message;
         $message->save();
 
-        return response()->json(['success' => true, 'message' => 'Tin nhắn đã được gửi thành công']);
+        return response()->json([
+            'status' => 200,
+        ]);
     }
+
     public function getMessageHistory(Request $request)
     {
-        $userId = $request->userId;
+        $receiverId = $request->receiverId;
 
-        // Lấy lịch sử tin nhắn từ database, bạn cần thay đổi tên bảng và điều kiện truy vấn
         $messages = Message::where('sender_id', auth()->id())
-                           ->where('receiver_id', $userId)
-                           ->orWhere('sender_id', $userId)
+                           ->where('receiver_id', $receiverId)
+                           ->orWhere('sender_id', $receiverId)
                            ->where('receiver_id', auth()->id())
                            ->orderBy('created_at', 'asc')
                            ->get();
 
-        // Trả về kết quả dưới dạng JSON
         return response()->json(['messages' => $messages]);
     }
 }

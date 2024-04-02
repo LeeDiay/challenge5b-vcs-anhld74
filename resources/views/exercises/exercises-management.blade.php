@@ -495,8 +495,6 @@
 
         });
         
-        
-        
         //Hiển thị thông tin cũ trước khi edit
         document.querySelectorAll('.editExerciseBtn').forEach(button => {
             button.addEventListener('click', function() {
