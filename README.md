@@ -1,5 +1,5 @@
 # LẬP TRÌNH WEB FRAMEWORK   
-## _https://challenge5b-vcs-anhld74.000webhostapp.com/_
+## _https://challenge5b-anhld74.000webhostapp.com/_
 
 ## Yêu cầu ứng dụng: 
 - Lập trình bằng framework Laravel, sử dụng DB MySQL để xây dựng
